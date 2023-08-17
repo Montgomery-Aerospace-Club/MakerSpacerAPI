@@ -1,4 +1,6 @@
 # Makerspace API 
 
 ## Contributors
-EDED2314
+
+# Big thanks
+Mventory - check their repo out - most code from them
