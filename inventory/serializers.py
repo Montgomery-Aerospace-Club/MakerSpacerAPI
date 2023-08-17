@@ -1,29 +1,53 @@
 import os
 from .utils import OctopartClient
-from .models import Building, Room, StorageUnit, StorageBin, Component, ComponentMeasurementUnit
+from .models import (
+    Building,
+    Room,
+    StorageUnit,
+    StorageBin,
+    Component,
+    ComponentMeasurementUnit,
+    User,
+)
 from rest_framework import serializers
+
+
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = User
+        fields = ["url", "name", "user_id", "email"]
 
 
 class BuildingSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Building
-        fields = ['url', 'name', 'address', 'postcode']
+        fields = ["url", "name", "address", "postcode"]
 
 
 class RoomSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Room
-        fields = ['url', 'name', 'building']
+        fields = ["url", "name", "building"]
+
 
 class StorageUnitSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = StorageUnit
-        fields = ['url', 'name', 'room']
+        fields = ["url", "name", "room"]
+
 
 class StorageBinSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = StorageBin
-        fields = ['url', 'name', 'short_code', 'unit_row','unit_column', 'storage_unit']
+        fields = [
+            "url",
+            "name",
+            "short_code",
+            "unit_row",
+            "unit_column",
+            "storage_unit",
+        ]
+
 
 class ComponentSerializer(serializers.HyperlinkedModelSerializer):
     octopart_data = serializers.SerializerMethodField()
@@ -37,7 +61,9 @@ class ComponentSerializer(serializers.HyperlinkedModelSerializer):
                 if parts_res != {}:
                     op_data["hits"] = parts_res[0]["hits"]
                     if op_data["hits"] > 0:
-                        for doc in parts_res[0]["parts"][0]["document_collections"][0]["documents"]:
+                        for doc in parts_res[0]["parts"][0]["document_collections"][0][
+                            "documents"
+                        ]:
                             if doc["name"] == "Datasheet":
                                 op_data["datasheet_url"] = doc["url"]
                             else:
@@ -46,10 +72,21 @@ class ComponentSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Component
-        fields = ['url', 'name', 'sku', 'mpn', 'upc', 'octopart_data', 'storage_bin','measurement_unit', 'qty']
+        fields = [
+            "url",
+            "name",
+            "sku",
+            "mpn",
+            "upc",
+            "octopart_data",
+            "storage_bin",
+            "measurement_unit",
+            "qty",
+        ]
         depth = 4
+
 
 class ComponentMeasurementUnitSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = ComponentMeasurementUnit
-        fields = ['url', 'unit_name', 'unit_description']
+        fields = ["url", "unit_name", "unit_description"]

@@ -6,8 +6,8 @@ from django_prometheus.models import ExportModelOperationsMixin
 
 
 class User(ExportModelOperationsMixin("user"), models.Model):
-    id = models.PositiveSmallIntegerField(max_length=10)
     name = models.CharField(max_length=20)
+    user_id = models.PositiveSmallIntegerField(max_length=10)
     email = models.CharField(max_length=50)
 
     def __str__(self):
