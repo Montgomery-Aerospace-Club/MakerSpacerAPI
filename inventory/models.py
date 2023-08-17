@@ -1,13 +1,14 @@
 from django.db import models
 from django.core.validators import MinValueValidator
 from django_prometheus.models import ExportModelOperationsMixin
+from django.core.validators import MaxValueValidator
 
 # Create your models here.
 
 
 class User(ExportModelOperationsMixin("user"), models.Model):
     name = models.CharField(max_length=20)
-    user_id = models.PositiveSmallIntegerField(max_length=10)
+    user_id = models.PositiveIntegerField(validators=[MaxValueValidator(999999)])
     email = models.CharField(max_length=50)
 
     def __str__(self):
