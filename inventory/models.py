@@ -73,6 +73,7 @@ class Component(ExportModelOperationsMixin("Component"), models.Model):
         ComponentMeasurementUnit, on_delete=models.CASCADE
     )
     qty = models.IntegerField(default=0, validators=[MinValueValidator(0)])
+    checked_out = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name

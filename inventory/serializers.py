@@ -82,6 +82,7 @@ class ComponentSerializer(serializers.HyperlinkedModelSerializer):
             "storage_bin",
             "measurement_unit",
             "qty",
+            "checked_out",
         ]
         depth = 4
 
