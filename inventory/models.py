@@ -9,10 +9,10 @@ from django.core.validators import MaxValueValidator
 class User(ExportModelOperationsMixin("user"), models.Model):
     name = models.CharField(max_length=20)
     user_id = models.PositiveIntegerField(validators=[MaxValueValidator(999999)])
-    email = models.CharField(max_length=50)
+    email = models.EmailField(max_length=50)
 
     def __str__(self):
-        return self.unit_name
+        return self.name
 
 
 class ComponentMeasurementUnit(
@@ -65,9 +65,9 @@ class StorageBin(ExportModelOperationsMixin("StorageBin"), models.Model):
 
 class Component(ExportModelOperationsMixin("Component"), models.Model):
     name = models.CharField(max_length=200)
-    sku = models.CharField(max_length=100)
+    sku = models.CharField(max_length=100, default="", null=True, blank=True)
     mpn = models.CharField(max_length=100, null=True, blank=True)
-    upc = models.IntegerField(null=True, blank=True)
+    upc = models.IntegerField(default=6969, null=True, blank=True)
     storage_bin = models.ManyToManyField(StorageBin)
     measurement_unit = models.ForeignKey(
         ComponentMeasurementUnit, on_delete=models.CASCADE

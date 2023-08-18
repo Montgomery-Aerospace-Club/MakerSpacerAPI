@@ -17,6 +17,15 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         model = User
         fields = ["url", "name", "user_id", "email"]
 
+    # def create(self, validated_data):
+    #     user = User(
+    #         email=validated_data["email"],
+    #         username=validated_data["username"],
+    #     )
+    #     user.set_password(validated_data["password"])
+    #     user.save()
+    #     return user
+
 
 class BuildingSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -50,25 +59,25 @@ class StorageBinSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ComponentSerializer(serializers.HyperlinkedModelSerializer):
-    octopart_data = serializers.SerializerMethodField()
+    # octopart_data = serializers.SerializerMethodField()
 
-    def get_octopart_data(self, obj):
-        op_data = {}
-        if os.getenv("MVENTORY_OCTOPART_API_KEY"):
-            if obj.mpn is not None:
-                oc = OctopartClient()
-                parts_res = oc.match_mpns([obj.mpn])
-                if parts_res != {}:
-                    op_data["hits"] = parts_res[0]["hits"]
-                    if op_data["hits"] > 0:
-                        for doc in parts_res[0]["parts"][0]["document_collections"][0][
-                            "documents"
-                        ]:
-                            if doc["name"] == "Datasheet":
-                                op_data["datasheet_url"] = doc["url"]
-                            else:
-                                op_data["datasheet_url"] = None
-        return op_data
+    # def get_octopart_data(self, obj):
+    #     op_data = {}
+    #     if os.getenv("MVENTORY_OCTOPART_API_KEY"):
+    #         if obj.mpn is not None:
+    #             oc = OctopartClient()
+    #             parts_res = oc.match_mpns([obj.mpn])
+    #             if parts_res != {}:
+    #                 op_data["hits"] = parts_res[0]["hits"]
+    #                 if op_data["hits"] > 0:
+    #                     for doc in parts_res[0]["parts"][0]["document_collections"][0][
+    #                         "documents"
+    #                     ]:
+    #                         if doc["name"] == "Datasheet":
+    #                             op_data["datasheet_url"] = doc["url"]
+    #                         else:
+    #                             op_data["datasheet_url"] = None
+    #     return op_data
 
     class Meta:
         model = Component
@@ -78,13 +87,11 @@ class ComponentSerializer(serializers.HyperlinkedModelSerializer):
             "sku",
             "mpn",
             "upc",
-            "octopart_data",
             "storage_bin",
             "measurement_unit",
             "qty",
             "checked_out",
         ]
-        depth = 4
 
 
 class ComponentMeasurementUnitSerializer(serializers.HyperlinkedModelSerializer):

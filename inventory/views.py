@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from rest_framework import response, status
 
 # Create your views here.
 from .models import (
@@ -35,7 +36,12 @@ class UserViewSet(viewsets.ModelViewSet):
     search_fields = ["id", "name"]
     filter_backends = (filters.SearchFilter,)
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAdminUser]
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return response.Response(status=status.HTTP_202_ACCEPTED)
 
 
 class BuildingViewSet(viewsets.ModelViewSet):
@@ -49,6 +55,11 @@ class BuildingViewSet(viewsets.ModelViewSet):
     serializer_class = BuildingSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return response.Response(status=status.HTTP_202_ACCEPTED)
+
 
 class RoomViewSet(viewsets.ModelViewSet):
     """
@@ -60,6 +71,11 @@ class RoomViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter,)
     serializer_class = RoomSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return response.Response(status=status.HTTP_202_ACCEPTED)
 
 
 class StorageUnitViewSet(viewsets.ModelViewSet):
@@ -73,6 +89,11 @@ class StorageUnitViewSet(viewsets.ModelViewSet):
     serializer_class = StorageUnitSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return response.Response(status=status.HTTP_202_ACCEPTED)
+
 
 class StorageBinViewSet(viewsets.ModelViewSet):
     """
@@ -85,6 +106,11 @@ class StorageBinViewSet(viewsets.ModelViewSet):
     serializer_class = StorageBinSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return response.Response(status=status.HTTP_202_ACCEPTED)
+
 
 class ComponentViewSet(viewsets.ModelViewSet):
     """
@@ -96,8 +122,13 @@ class ComponentViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter,)
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     queryset = Component.objects.all()
-    search_fields = ["name", "sku", "upc", "checked_out"]
+    search_fields = ["name", "checked_out"]
     serializer_class = ComponentSerializer
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return response.Response(status=status.HTTP_202_ACCEPTED)
 
 
 class ComponentMeasurementUnitViewSet(viewsets.ModelViewSet):
@@ -108,3 +139,8 @@ class ComponentMeasurementUnitViewSet(viewsets.ModelViewSet):
     queryset = ComponentMeasurementUnit.objects.all()
     serializer_class = ComponentMeasurementUnitSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return response.Response(status=status.HTTP_202_ACCEPTED)
