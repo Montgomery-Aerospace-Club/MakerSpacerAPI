@@ -91,6 +91,8 @@ class ComponentSerializer(serializers.HyperlinkedModelSerializer):
             "measurement_unit",
             "qty",
             "checked_out",
+            "person_who_checked_out",
+            "description",
         ]
 
 

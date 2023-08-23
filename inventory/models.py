@@ -65,15 +65,19 @@ class StorageBin(ExportModelOperationsMixin("StorageBin"), models.Model):
 
 class Component(ExportModelOperationsMixin("Component"), models.Model):
     name = models.CharField(max_length=200)
-    sku = models.CharField(max_length=100, default="", null=True, blank=True)
-    mpn = models.CharField(max_length=100, null=True, blank=True)
-    upc = models.IntegerField(default=6969, null=True, blank=True)
+    sku = models.CharField(max_length=100, default="", blank=True)
+    mpn = models.CharField(max_length=100, default="", blank=True)
+    upc = models.IntegerField(default=0, blank=True)
     storage_bin = models.ManyToManyField(StorageBin)
     measurement_unit = models.ForeignKey(
         ComponentMeasurementUnit, on_delete=models.CASCADE
     )
     qty = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     checked_out = models.BooleanField(default=False)
+    person_who_checked_out = models.ForeignKey(
+        User, on_delete=models.SET_NULL, null=True
+    )
+    description = models.TextField(default="", blank=True)
 
     def __str__(self):
         return self.name

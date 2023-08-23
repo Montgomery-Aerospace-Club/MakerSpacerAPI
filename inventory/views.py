@@ -33,7 +33,7 @@ class UserViewSet(viewsets.ModelViewSet):
     """
 
     queryset = User.objects.all().order_by("name")
-    search_fields = ["id", "name"]
+    search_fields = ["user_id", "name"]
     filter_backends = (filters.SearchFilter,)
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAdminUser]
@@ -117,13 +117,16 @@ class ComponentViewSet(viewsets.ModelViewSet):
     API endpoint that allows groups to be viewed or edited.
     """
 
-    filter_backends = (filters.SearchFilter,)
-    search_fields = ["name"]
-    filter_backends = (filters.SearchFilter,)
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     queryset = Component.objects.all()
-    search_fields = ["name", "checked_out"]
+    search_fields = [
+        "name",
+        "checked_out",
+        "description",
+        "person_who_checked_out__user_id",
+    ]
+    filter_backends = (filters.SearchFilter,)
     serializer_class = ComponentSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
