@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from rest_framework import response, status
 
+
 # Create your views here.
 from .models import (
     Building,
@@ -33,7 +34,7 @@ class UserViewSet(viewsets.ModelViewSet):
     """
 
     queryset = User.objects.all().order_by("name")
-    search_fields = ["user_id", "name"]
+    search_fields = ["=user_id", "name"]
     filter_backends = (filters.SearchFilter,)
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAdminUser]
@@ -122,8 +123,9 @@ class ComponentViewSet(viewsets.ModelViewSet):
         "name",
         "checked_out",
         "description",
-        "person_who_checked_out__user_id",
+        "=person_who_checked_out__user_id",
     ]
+    # filterset_class = ProductFilter
     filter_backends = (filters.SearchFilter,)
     serializer_class = ComponentSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
