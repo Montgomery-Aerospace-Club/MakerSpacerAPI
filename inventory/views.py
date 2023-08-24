@@ -52,6 +52,7 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     search_fields = ["=user_id", "=email", "=username"]
+    filter_backends = (filters.SearchFilter,)
     permission_classes = [CustomPermission]
 
     @action(methods=["post"], detail=False, permission_classes=[permissions.AllowAny])
