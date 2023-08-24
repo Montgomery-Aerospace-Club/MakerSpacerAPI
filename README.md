@@ -20,3 +20,7 @@ use ful links
 - https://stackoverflow.com/questions/33496333/valueerror-related-model-uapp-model-cannot-be-resolved
 - https://stackoverflow.com/questions/40073205/django-core-exceptions-improperlyconfigured-could-not-resolve-url-for-hyperlink
 - https://stackoverflow.com/questions/33496333/valueerror-related-model-uapp-model-cannot-be-resolved
+
+# mile stones
+- holy shtters i finally finished some portion of the back end
+- my brain is dead what the
