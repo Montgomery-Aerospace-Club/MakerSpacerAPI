@@ -76,12 +76,15 @@ class ComponentMeasurementUnit(
 
 class Borrow(ExportModelOperationsMixin("Borrow"), models.Model):
     qty = models.IntegerField(default=0, validators=[MinValueValidator(0)])
-    person_who_borrowed = models.ForeignKey(
-        User, on_delete=models.SET_NULL, null=True, blank=True
-    )
+    person_who_borrowed = models.ForeignKey(User, on_delete=models.CASCADE)
     timestamp_check_out = models.DateTimeField()
     timestamp_check_in = models.DateTimeField(null=True, blank=True)
     borrow_in_progress = models.BooleanField(default=True)
+
+    def __str__(self):
+        return (
+            f"Borrow - Amount: {self.qty} - Person: {self.person_who_borrowed.username}"
+        )
 
 
 class Component(ExportModelOperationsMixin("Component"), models.Model):

@@ -4,6 +4,7 @@ from rest_framework import response, status
 
 # Create your views here.
 from .models import (
+    Borrow,
     Building,
     Room,
     StorageUnit,
@@ -156,16 +157,16 @@ class StorageBinViewSet(viewsets.ModelViewSet):
 
 
 class BorrowViewSet(viewsets.ModelViewSet):
-    queryset = ComponentMeasurementUnit.objects.all()
+    queryset = Borrow.objects.all()
     search_fields = [
         "=timestamp_check_out",
         "person_who_borrowed__username",
         "=person_who_borrowed__user_id",
         "=person_who_borrowed__email",
+        "=borrow_in_progress",  # boolean 1 and 0's
     ]
 
     filter_backends = (filters.SearchFilter,)
-    filterset_fields = ["borrow_in_progress"]
     serializer_class = BorrowSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 

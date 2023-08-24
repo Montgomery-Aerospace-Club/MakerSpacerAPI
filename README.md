@@ -16,3 +16,7 @@ use ful links
 - https://simpleisbetterthancomplex.com/tutorial/2018/11/22/how-to-implement-token-authentication-using-django-rest-framework.html
 - https://stackoverflow.com/questions/42091013/django-rest-framework-updating-a-model-using-model-modelviewset
 - https://www.django-rest-framework.org/api-guide/filtering/
+- https://stackoverflow.com/questions/43871604/valueerror-dependency-on-app-with-no-migrations-customuser
+- https://stackoverflow.com/questions/33496333/valueerror-related-model-uapp-model-cannot-be-resolved
+- https://stackoverflow.com/questions/40073205/django-core-exceptions-improperlyconfigured-could-not-resolve-url-for-hyperlink
+- https://stackoverflow.com/questions/33496333/valueerror-related-model-uapp-model-cannot-be-resolved

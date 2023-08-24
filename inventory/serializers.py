@@ -57,18 +57,6 @@ class ComponentMeasurementUnitSerializer(serializers.HyperlinkedModelSerializer)
         fields = ["url", "unit_name", "unit_description"]
 
 
-class BorrowSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Borrow
-        fields = [
-            "url",
-            "person_who_borrowed",
-            "timestamp_check_out",
-            "timestamp_check_in",
-            "borrow_in_progress",
-        ]
-
-
 class ComponentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Component
@@ -83,6 +71,18 @@ class ComponentSerializer(serializers.HyperlinkedModelSerializer):
             "qty",
             "description",
             "borrow",
+        ]
+
+
+class BorrowSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Borrow
+        fields = [
+            "url",
+            "person_who_borrowed",
+            "timestamp_check_out",
+            "timestamp_check_in",
+            "borrow_in_progress",
         ]
 
     # def update(self, instance, validated_data):

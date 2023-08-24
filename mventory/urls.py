@@ -27,13 +27,19 @@ router.register(r"storage_units", views.StorageUnitViewSet)
 router.register(r"storage_bins", views.StorageBinViewSet)
 router.register(r"components", views.ComponentViewSet)
 router.register(r"component_measurements", views.ComponentMeasurementUnitViewSet)
+router.register(r"borrows", views.BorrowViewSet)
 router.register(r"users", views.UserViewSet)
-router.register(r"borrow", views.BorrowViewSet)
+
 
 urlpatterns = [
     path("", views.index),
     path("admin/", admin.site.urls),
-    path("rest/", include(router.urls)),
+    path(
+        "rest/",
+        include(
+            router.urls,
+        ),
+    ),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
     path("api-user-login/", views.UserLogIn.as_view()),
     path("", include("django_prometheus.urls")),
