@@ -36,7 +36,7 @@ def index(request):
     return render(request, "index.html")
 
 
-class CustomPermission(permissions.BasePermission):
+class AuthReadOnlyPermission(permissions.BasePermission):
     SAFE_METHODS = ("GET", "HEAD", "OPTIONS")
 
     def has_permission(self, request, view):
@@ -48,12 +48,22 @@ class CustomPermission(permissions.BasePermission):
         return False
 
 
+class EveryoneReadOnlyPermission(permissions.BasePermission):
+    def has_permission(self, request, view):
+        # Allow read-only access for authenticated users
+        if request.user and request.user.is_authenticated:
+            if request.user.is_staff:  # Check if the user is an admin
+                return True
+            return view.action in ["list", "retrieve"]  # Allow read-only actions
+        return view.action in ["list", "retrieve"]
+
+
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     search_fields = ["=user_id", "=email", "=username"]
     filter_backends = (filters.SearchFilter,)
-    permission_classes = [CustomPermission]
+    permission_classes = [AuthReadOnlyPermission]
 
     @action(methods=["post"], detail=False, permission_classes=[permissions.AllowAny])
     def register(self, request, *args, **kwargs):
@@ -118,7 +128,7 @@ class BuildingViewSet(viewsets.ModelViewSet):
     search_fields = ["name", "address", "postcode"]
     filter_backends = (filters.SearchFilter,)
     serializer_class = BuildingSerializer
-    permission_classes = [CustomPermission]
+    permission_classes = [EveryoneReadOnlyPermission]
 
 
 class RoomViewSet(viewsets.ModelViewSet):
@@ -130,7 +140,7 @@ class RoomViewSet(viewsets.ModelViewSet):
     search_fields = ["name"]
     filter_backends = (filters.SearchFilter,)
     serializer_class = RoomSerializer
-    permission_classes = [CustomPermission]
+    permission_classes = [EveryoneReadOnlyPermission]
 
 
 class StorageUnitViewSet(viewsets.ModelViewSet):
@@ -142,7 +152,7 @@ class StorageUnitViewSet(viewsets.ModelViewSet):
     search_fields = ["name"]
     filter_backends = (filters.SearchFilter,)
     serializer_class = StorageUnitSerializer
-    permission_classes = [CustomPermission]
+    permission_classes = [EveryoneReadOnlyPermission]
 
 
 class StorageBinViewSet(viewsets.ModelViewSet):
@@ -154,7 +164,7 @@ class StorageBinViewSet(viewsets.ModelViewSet):
     search_fields = ["name", "short_code"]
     filter_backends = (filters.SearchFilter,)
     serializer_class = StorageBinSerializer
-    permission_classes = [CustomPermission]
+    permission_classes = [EveryoneReadOnlyPermission]
 
 
 class BorrowViewSet(viewsets.ModelViewSet):
@@ -165,6 +175,8 @@ class BorrowViewSet(viewsets.ModelViewSet):
         "=person_who_borrowed__user_id",
         "=person_who_borrowed__email",
         "=borrow_in_progress",  # boolean 1 and 0's
+        "component__name",
+        "component__description",
     ]
 
     filter_backends = (filters.SearchFilter,)
@@ -180,13 +192,12 @@ class ComponentViewSet(viewsets.ModelViewSet):
     queryset = Component.objects.all()
     search_fields = [
         "name",
-        "checked_out",
         "description",
     ]
 
     filter_backends = (filters.SearchFilter,)
     serializer_class = ComponentSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [EveryoneReadOnlyPermission]
 
 
 class ComponentMeasurementUnitViewSet(viewsets.ModelViewSet):
@@ -196,4 +207,4 @@ class ComponentMeasurementUnitViewSet(viewsets.ModelViewSet):
 
     queryset = ComponentMeasurementUnit.objects.all()
     serializer_class = ComponentMeasurementUnitSerializer
-    permission_classes = [CustomPermission]
+    permission_classes = [EveryoneReadOnlyPermission]

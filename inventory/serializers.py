@@ -70,7 +70,6 @@ class ComponentSerializer(serializers.HyperlinkedModelSerializer):
             "measurement_unit",
             "qty",
             "description",
-            "borrow",
         ]
 
 
@@ -83,6 +82,7 @@ class BorrowSerializer(serializers.HyperlinkedModelSerializer):
             "timestamp_check_out",
             "timestamp_check_in",
             "borrow_in_progress",
+            "component",
         ]
 
     # def update(self, instance, validated_data):
