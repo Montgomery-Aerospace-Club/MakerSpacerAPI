@@ -46,6 +46,12 @@ INSTALLED_APPS = [
     "django_prometheus",
     "rest_framework",
     "inventory.apps.InventoryConfig",
+    "corsheaders",
+    "rest_framework.authtoken",
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3030",  # change this later once we host the app
 ]
 
 MIDDLEWARE = [
@@ -59,6 +65,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django_prometheus.middleware.PrometheusAfterMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
 ]
 
 ROOT_URLCONF = "mventory.urls"
@@ -156,8 +163,16 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+AUTH_USER_MODEL = "inventory.User"
+
 # REST Framework
-REST_FRAMEWORK = {"TEST_REQUEST_DEFAULT_FORMAT": "json"}
+REST_FRAMEWORK = {
+    "TEST_REQUEST_DEFAULT_FORMAT": "json",
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.TokenAuthentication",
+    ),
+}
 
 # Octopart
 OCTOPART_API_KEY = os.getenv("MVENTORY_OCTOPART_API_KEY")

@@ -15,16 +15,7 @@ from rest_framework import serializers
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ["url", "name", "user_id", "email"]
-
-    # def create(self, validated_data):
-    #     user = User(
-    #         email=validated_data["email"],
-    #         username=validated_data["username"],
-    #     )
-    #     user.set_password(validated_data["password"])
-    #     user.save()
-    #     return user
+        fields = ["url", "username", "user_id", "email", "password"]
 
 
 class BuildingSerializer(serializers.HyperlinkedModelSerializer):
@@ -94,6 +85,7 @@ class ComponentSerializer(serializers.HyperlinkedModelSerializer):
             "person_who_checked_out",
             "description",
         ]
+        depth = 10
 
 
 class ComponentMeasurementUnitSerializer(serializers.HyperlinkedModelSerializer):

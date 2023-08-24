@@ -34,5 +34,6 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("rest/", include(router.urls)),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
+    path("api-user-login/", views.UserLogIn.as_view()),
     path("", include("django_prometheus.urls")),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
