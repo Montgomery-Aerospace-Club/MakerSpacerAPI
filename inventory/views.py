@@ -41,7 +41,6 @@ class CustomPermission(permissions.BasePermission):
         # Allow read-only access for authenticated users
         if request.user and request.user.is_authenticated:
             if request.user.is_staff:  # Check if the user is an admin
-                # print(request.user.username)
                 return True
             return view.action in ["list", "retrieve"]  # Allow read-only actions
         return False
@@ -95,7 +94,7 @@ class UserLogIn(ObtainAuthToken):
         )
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data["user"]
-        token = Token.objects.get(user=user)
+        token, created = Token.objects.get_or_create(user=user)
         return Response(
             {
                 "token": token.key,
@@ -105,27 +104,6 @@ class UserLogIn(ObtainAuthToken):
                 "email": user.email,
             }
         )
-
-
-# class UserViewSet(viewsets.ModelViewSet):
-#     """
-#     API endpoint that allows users to be viewed or edited.
-#     """
-
-#     queryset = User.objects.all().order_by("name")
-#     search_fields = [
-#         "=user_id",
-#         "name",
-#         "=email",
-#     ]  # email used to check admin is actually logging in or not, use search feature etc
-#     filter_backends = (filters.SearchFilter,)
-#     serializer_class = UserSerializer
-#     permission_classes = [CustomPermission]
-
-#     def destroy(self, request, *args, **kwargs):
-#         instance = self.get_object()
-#         self.perform_destroy(instance)
-#         return response.Response(status=status.HTTP_202_ACCEPTED)
 
 
 class BuildingViewSet(viewsets.ModelViewSet):
@@ -139,11 +117,6 @@ class BuildingViewSet(viewsets.ModelViewSet):
     serializer_class = BuildingSerializer
     permission_classes = [CustomPermission]
 
-    def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        self.perform_destroy(instance)
-        return response.Response(status=status.HTTP_202_ACCEPTED)
-
 
 class RoomViewSet(viewsets.ModelViewSet):
     """
@@ -155,11 +128,6 @@ class RoomViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter,)
     serializer_class = RoomSerializer
     permission_classes = [CustomPermission]
-
-    def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        self.perform_destroy(instance)
-        return response.Response(status=status.HTTP_202_ACCEPTED)
 
 
 class StorageUnitViewSet(viewsets.ModelViewSet):
@@ -173,11 +141,6 @@ class StorageUnitViewSet(viewsets.ModelViewSet):
     serializer_class = StorageUnitSerializer
     permission_classes = [CustomPermission]
 
-    def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        self.perform_destroy(instance)
-        return response.Response(status=status.HTTP_202_ACCEPTED)
-
 
 class StorageBinViewSet(viewsets.ModelViewSet):
     """
@@ -189,11 +152,6 @@ class StorageBinViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter,)
     serializer_class = StorageBinSerializer
     permission_classes = [CustomPermission]
-
-    def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        self.perform_destroy(instance)
-        return response.Response(status=status.HTTP_202_ACCEPTED)
 
 
 class ComponentViewSet(viewsets.ModelViewSet):
@@ -208,15 +166,10 @@ class ComponentViewSet(viewsets.ModelViewSet):
         "description",
         "=person_who_checked_out__user_id",
     ]
-    # filterset_class = ProductFilter
+
     filter_backends = (filters.SearchFilter,)
     serializer_class = ComponentSerializer
-    permission_classes = [CustomPermission]  # change this latter??
-
-    def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        self.perform_destroy(instance)
-        return response.Response(status=status.HTTP_202_ACCEPTED)
+    permission_classes = [permissions.IsAuthenticated]
 
 
 class ComponentMeasurementUnitViewSet(viewsets.ModelViewSet):
@@ -227,8 +180,3 @@ class ComponentMeasurementUnitViewSet(viewsets.ModelViewSet):
     queryset = ComponentMeasurementUnit.objects.all()
     serializer_class = ComponentMeasurementUnitSerializer
     permission_classes = [CustomPermission]
-
-    def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        self.perform_destroy(instance)
-        return response.Response(status=status.HTTP_202_ACCEPTED)

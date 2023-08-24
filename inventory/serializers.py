@@ -50,26 +50,6 @@ class StorageBinSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ComponentSerializer(serializers.HyperlinkedModelSerializer):
-    # octopart_data = serializers.SerializerMethodField()
-
-    # def get_octopart_data(self, obj):
-    #     op_data = {}
-    #     if os.getenv("MVENTORY_OCTOPART_API_KEY"):
-    #         if obj.mpn is not None:
-    #             oc = OctopartClient()
-    #             parts_res = oc.match_mpns([obj.mpn])
-    #             if parts_res != {}:
-    #                 op_data["hits"] = parts_res[0]["hits"]
-    #                 if op_data["hits"] > 0:
-    #                     for doc in parts_res[0]["parts"][0]["document_collections"][0][
-    #                         "documents"
-    #                     ]:
-    #                         if doc["name"] == "Datasheet":
-    #                             op_data["datasheet_url"] = doc["url"]
-    #                         else:
-    #                             op_data["datasheet_url"] = None
-    #     return op_data
-
     class Meta:
         model = Component
         fields = [
@@ -85,7 +65,14 @@ class ComponentSerializer(serializers.HyperlinkedModelSerializer):
             "person_who_checked_out",
             "description",
         ]
-        depth = 10
+
+    # def update(self, instance, validated_data):
+    #     # Update the Foo instance
+    #     instance.person_who_checked_out = validated_data["person_who_checked_out"]
+    #     instance.save()
+    #     return instance
+
+    # depth = 10
 
 
 class ComponentMeasurementUnitSerializer(serializers.HyperlinkedModelSerializer):

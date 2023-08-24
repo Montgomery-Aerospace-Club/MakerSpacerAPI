@@ -13,3 +13,5 @@ use ful links
 - https://mattermost.com/blog/user-authentication-with-the-django-rest-framework-and-angular/
 - https://stackoverflow.com/questions/3052975/django-models-avoid-duplicates
 - https://stackoverflow.com/questions/46805662/collections-ordereddict-object-has-no-attribute-pk-django-rest-framework
+- https://simpleisbetterthancomplex.com/tutorial/2018/11/22/how-to-implement-token-authentication-using-django-rest-framework.html
+- https://stackoverflow.com/questions/42091013/django-rest-framework-updating-a-model-using-model-modelviewset

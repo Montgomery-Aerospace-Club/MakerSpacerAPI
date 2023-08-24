@@ -86,7 +86,7 @@ class Component(ExportModelOperationsMixin("Component"), models.Model):
     qty = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     checked_out = models.BooleanField(default=False)
     person_who_checked_out = models.ForeignKey(
-        User, on_delete=models.SET_NULL, null=True
+        User, on_delete=models.SET_NULL, null=True, blank=True
     )
     description = models.TextField(default="", blank=True)
 
