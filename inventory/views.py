@@ -14,6 +14,7 @@ from .models import (
 )
 from rest_framework import viewsets, permissions, filters
 from inventory.serializers import (
+    BorrowsSerializer,
     BuildingSerializer,
     RoomSerializer,
     StorageUnitSerializer,
@@ -154,6 +155,21 @@ class StorageBinViewSet(viewsets.ModelViewSet):
     permission_classes = [CustomPermission]
 
 
+class BorrowsViewSet(viewsets.ModelViewSet):
+    queryset = ComponentMeasurementUnit.objects.all()
+    search_fields = [
+        "=timestamp_check_out",
+        "person_who_borrowed__username",
+        "=person_who_borrowed__user_id",
+        "=person_who_borrowed__email",
+    ]
+
+    filter_backends = (filters.SearchFilter,)
+    filterset_fields = ["borrow_in_progress"]
+    serializer_class = BorrowsSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+
 class ComponentViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows groups to be viewed or edited.
@@ -164,12 +180,11 @@ class ComponentViewSet(viewsets.ModelViewSet):
         "name",
         "checked_out",
         "description",
-        "=person_who_checked_out__user_id",
     ]
 
     filter_backends = (filters.SearchFilter,)
     serializer_class = ComponentSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 
 class ComponentMeasurementUnitViewSet(viewsets.ModelViewSet):

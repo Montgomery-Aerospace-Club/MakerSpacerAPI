@@ -26,16 +26,6 @@ class User(AbstractUser):
         return self.username
 
 
-class ComponentMeasurementUnit(
-    ExportModelOperationsMixin("ComponentMeasurementUnit"), models.Model
-):
-    unit_name = models.CharField(max_length=10)
-    unit_description = models.CharField(max_length=200, null=True, blank=True)
-
-    def __str__(self):
-        return self.unit_name
-
-
 class Building(ExportModelOperationsMixin("Building"), models.Model):
     name = models.CharField(max_length=200)
     address = models.CharField(max_length=200, null=True, blank=True)
@@ -74,6 +64,26 @@ class StorageBin(ExportModelOperationsMixin("StorageBin"), models.Model):
         return self.name
 
 
+class ComponentMeasurementUnit(
+    ExportModelOperationsMixin("ComponentMeasurementUnit"), models.Model
+):
+    unit_name = models.CharField(max_length=10)
+    unit_description = models.CharField(max_length=200, null=True, blank=True)
+
+    def __str__(self):
+        return self.unit_name
+
+
+class Borrows(ExportModelOperationsMixin("Borrows"), models.Model):
+    qty = models.IntegerField(default=0, validators=[MinValueValidator(0)])
+    person_who_borrowed = models.ForeignKey(
+        User, on_delete=models.SET_NULL, null=True, blank=True
+    )
+    timestamp_check_out = models.DateTimeField()
+    timestamp_check_in = models.DateTimeField(null=True, blank=True)
+    borrow_in_progress = models.BooleanField(default=True)
+
+
 class Component(ExportModelOperationsMixin("Component"), models.Model):
     name = models.CharField(max_length=200)
     sku = models.CharField(max_length=100, default="", blank=True)
@@ -84,11 +94,8 @@ class Component(ExportModelOperationsMixin("Component"), models.Model):
         ComponentMeasurementUnit, on_delete=models.CASCADE
     )
     qty = models.IntegerField(default=0, validators=[MinValueValidator(0)])
-    checked_out = models.BooleanField(default=False)
-    person_who_checked_out = models.ForeignKey(
-        User, on_delete=models.SET_NULL, null=True, blank=True
-    )
     description = models.TextField(default="", blank=True)
+    borrow = models.ForeignKey(Borrows, on_delete=models.DO_NOTHING, null=True)
 
     def __str__(self):
         return self.name

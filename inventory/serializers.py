@@ -49,6 +49,25 @@ class StorageBinSerializer(serializers.HyperlinkedModelSerializer):
         ]
 
 
+class ComponentMeasurementUnitSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = ComponentMeasurementUnit
+        fields = ["url", "unit_name", "unit_description"]
+
+
+class BorrowsSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Component
+        fields = [
+            "url",
+            "qty",
+            "person_who_borrowed",
+            "timestamp_check_out",
+            "timestamp_check_in",
+            "borrow_in_progress",
+        ]
+
+
 class ComponentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Component
@@ -61,9 +80,8 @@ class ComponentSerializer(serializers.HyperlinkedModelSerializer):
             "storage_bin",
             "measurement_unit",
             "qty",
-            "checked_out",
-            "person_who_checked_out",
             "description",
+            "borrow",
         ]
 
     # def update(self, instance, validated_data):
@@ -73,9 +91,3 @@ class ComponentSerializer(serializers.HyperlinkedModelSerializer):
     #     return instance
 
     # depth = 10
-
-
-class ComponentMeasurementUnitSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = ComponentMeasurementUnit
-        fields = ["url", "unit_name", "unit_description"]
