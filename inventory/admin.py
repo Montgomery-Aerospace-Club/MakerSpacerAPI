@@ -9,6 +9,7 @@ from .models import (
     StorageBin,
     Component,
     User,
+    Borrow,
 )
 
 admin.site.register(ComponentMeasurementUnit)
@@ -18,3 +19,4 @@ admin.site.register(StorageUnit)
 admin.site.register(StorageBin)
 admin.site.register(Component)
 admin.site.register(User)
+admin.site.register(Borrow)

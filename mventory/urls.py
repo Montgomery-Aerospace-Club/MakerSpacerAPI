@@ -28,6 +28,7 @@ router.register(r"storage_bins", views.StorageBinViewSet)
 router.register(r"components", views.ComponentViewSet)
 router.register(r"component_measurements", views.ComponentMeasurementUnitViewSet)
 router.register(r"users", views.UserViewSet)
+router.register(r"borrow", views.BorrowViewSet)
 
 urlpatterns = [
     path("", views.index),

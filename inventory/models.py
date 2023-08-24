@@ -74,7 +74,7 @@ class ComponentMeasurementUnit(
         return self.unit_name
 
 
-class Borrows(ExportModelOperationsMixin("Borrows"), models.Model):
+class Borrow(ExportModelOperationsMixin("Borrow"), models.Model):
     qty = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     person_who_borrowed = models.ForeignKey(
         User, on_delete=models.SET_NULL, null=True, blank=True
@@ -95,7 +95,9 @@ class Component(ExportModelOperationsMixin("Component"), models.Model):
     )
     qty = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     description = models.TextField(default="", blank=True)
-    borrow = models.ForeignKey(Borrows, on_delete=models.DO_NOTHING, null=True)
+    borrow = models.ForeignKey(
+        Borrow, on_delete=models.DO_NOTHING, null=True, blank=True
+    )
 
     def __str__(self):
         return self.name

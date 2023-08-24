@@ -1,4 +1,5 @@
 import os
+
 from .utils import OctopartClient
 from .models import (
     Building,
@@ -8,6 +9,7 @@ from .models import (
     Component,
     ComponentMeasurementUnit,
     User,
+    Borrow,
 )
 from rest_framework import serializers
 
@@ -55,12 +57,11 @@ class ComponentMeasurementUnitSerializer(serializers.HyperlinkedModelSerializer)
         fields = ["url", "unit_name", "unit_description"]
 
 
-class BorrowsSerializer(serializers.HyperlinkedModelSerializer):
+class BorrowSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Component
+        model = Borrow
         fields = [
             "url",
-            "qty",
             "person_who_borrowed",
             "timestamp_check_out",
             "timestamp_check_in",

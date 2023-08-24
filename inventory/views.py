@@ -14,7 +14,7 @@ from .models import (
 )
 from rest_framework import viewsets, permissions, filters
 from inventory.serializers import (
-    BorrowsSerializer,
+    BorrowSerializer,
     BuildingSerializer,
     RoomSerializer,
     StorageUnitSerializer,
@@ -50,7 +50,7 @@ class CustomPermission(permissions.BasePermission):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    search_fields = ["=user_id", "=email", "username"]
+    search_fields = ["=user_id", "=email", "=username"]
     permission_classes = [CustomPermission]
 
     @action(methods=["post"], detail=False, permission_classes=[permissions.AllowAny])
@@ -155,7 +155,7 @@ class StorageBinViewSet(viewsets.ModelViewSet):
     permission_classes = [CustomPermission]
 
 
-class BorrowsViewSet(viewsets.ModelViewSet):
+class BorrowViewSet(viewsets.ModelViewSet):
     queryset = ComponentMeasurementUnit.objects.all()
     search_fields = [
         "=timestamp_check_out",
@@ -166,7 +166,7 @@ class BorrowsViewSet(viewsets.ModelViewSet):
 
     filter_backends = (filters.SearchFilter,)
     filterset_fields = ["borrow_in_progress"]
-    serializer_class = BorrowsSerializer
+    serializer_class = BorrowSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 
