@@ -35,7 +35,7 @@ class RoomSerializer(serializers.HyperlinkedModelSerializer):
 class StorageUnitSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = StorageUnit
-        fields = ["url", "name", "room"]
+        fields = ["url", "name", "short_code", "room"]
 
 
 class StorageBinSerializer(serializers.HyperlinkedModelSerializer):

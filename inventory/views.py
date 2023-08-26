@@ -149,7 +149,7 @@ class StorageUnitViewSet(viewsets.ModelViewSet):
     """
 
     queryset = StorageUnit.objects.all()
-    search_fields = ["name"]
+    search_fields = ["name", "short_code"]
     filter_backends = (filters.SearchFilter,)
     serializer_class = StorageUnitSerializer
     permission_classes = [EveryoneReadOnlyPermission]
@@ -208,3 +208,6 @@ class ComponentMeasurementUnitViewSet(viewsets.ModelViewSet):
     queryset = ComponentMeasurementUnit.objects.all()
     serializer_class = ComponentMeasurementUnitSerializer
     permission_classes = [EveryoneReadOnlyPermission]
+
+
+# Todo: add sign in sign out feature
