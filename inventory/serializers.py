@@ -57,7 +57,7 @@ class ComponentMeasurementUnitSerializer(serializers.HyperlinkedModelSerializer)
         fields = ["url", "unit_name", "unit_description"]
 
 
-class ComponentSerializer(serializers.HyperlinkedModelSerializer):
+class ComponentPostSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Component
         fields = [
@@ -71,6 +71,24 @@ class ComponentSerializer(serializers.HyperlinkedModelSerializer):
             "qty",
             "description",
         ]
+
+
+class ComponentGetSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Component
+        fields = [
+            "url",
+            "name",
+            "sku",
+            "mpn",
+            "upc",
+            "storage_bin",
+            "measurement_unit",
+            "qty",
+            "description",
+        ]
+
+        depth = 5
 
 
 class BorrowSerializer(serializers.HyperlinkedModelSerializer):

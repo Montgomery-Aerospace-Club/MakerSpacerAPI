@@ -20,9 +20,10 @@ from inventory.serializers import (
     RoomSerializer,
     StorageUnitSerializer,
     StorageBinSerializer,
-    ComponentSerializer,
+    ComponentGetSerializer,
     ComponentMeasurementUnitSerializer,
     UserSerializer,
+    ComponentPostSerializer,
 )
 
 from rest_framework.authtoken.views import ObtainAuthToken
@@ -196,8 +197,13 @@ class ComponentViewSet(viewsets.ModelViewSet):
     ]
 
     filter_backends = (filters.SearchFilter,)
-    serializer_class = ComponentSerializer
+    # serializer_class = ComponentGetSerializer
     permission_classes = [EveryoneReadOnlyPermission]
+
+    def get_serializer_class(self):
+        if self.action == "create":
+            return ComponentPostSerializer
+        return ComponentGetSerializer
 
 
 class ComponentMeasurementUnitViewSet(viewsets.ModelViewSet):
