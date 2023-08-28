@@ -1,6 +1,12 @@
 from django.shortcuts import render
 from rest_framework import response, status
 
+from inventory.perms import (
+    AuthReadOnlyPermission,
+    AuthorizedUserCanOnlyReadAndUpdate,
+    EveryoneReadOnlyPermission,
+)
+
 
 # Create your views here.
 from .models import (
@@ -28,35 +34,12 @@ from inventory.serializers import (
 
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.response import Response
-from rest_framework import permissions
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import action
 
 
 def index(request):
     return render(request, "index.html")
-
-
-class AuthReadOnlyPermission(permissions.BasePermission):
-    SAFE_METHODS = ("GET", "HEAD", "OPTIONS")
-
-    def has_permission(self, request, view):
-        # Allow read-only access for authenticated users
-        if request.user and request.user.is_authenticated:
-            if request.user.is_staff:  # Check if the user is an admin
-                return True
-            return view.action in ["list", "retrieve"]  # Allow read-only actions
-        return False
-
-
-class EveryoneReadOnlyPermission(permissions.BasePermission):
-    def has_permission(self, request, view):
-        # Allow read-only access for authenticated users
-        if request.user and request.user.is_authenticated:
-            if request.user.is_staff:  # Check if the user is an admin
-                return True
-            return view.action in ["list", "retrieve"]  # Allow read-only actions
-        return view.action in ["list", "retrieve"]
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -182,7 +165,7 @@ class BorrowViewSet(viewsets.ModelViewSet):
 
     filter_backends = (filters.SearchFilter,)
     serializer_class = BorrowSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [AuthorizedUserCanOnlyReadAndUpdate]
 
 
 class ComponentViewSet(viewsets.ModelViewSet):

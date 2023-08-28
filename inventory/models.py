@@ -67,8 +67,8 @@ class StorageBin(ExportModelOperationsMixin("StorageBin"), models.Model):
 class ComponentMeasurementUnit(
     ExportModelOperationsMixin("ComponentMeasurementUnit"), models.Model
 ):
-    unit_name = models.CharField(max_length=10)
-    unit_description = models.CharField(max_length=200, null=True, blank=True)
+    unit_name = models.CharField(max_length=30)
+    unit_description = models.TextField(max_length=200, null=True, blank=True)
 
     def __str__(self):
         return self.unit_name
