@@ -23,7 +23,6 @@ from rest_framework import viewsets, permissions, filters
 from inventory.serializers import (
     BorrowGetSerializer,
     BorrowPostSerializer,
-    BorrowSerializer,
     BuildingSerializer,
     RoomSerializer,
     StorageUnitSerializer,

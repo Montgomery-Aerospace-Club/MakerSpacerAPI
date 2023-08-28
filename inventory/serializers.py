@@ -115,7 +115,7 @@ class BorrowGetSerializer(serializers.HyperlinkedModelSerializer):
             "borrow_in_progress",
             "component",
         ]
-        depth = 4
+        depth = 7
 
     # def update(self, instance, validated_data):
     #     # Update the Foo instance
