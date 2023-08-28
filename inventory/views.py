@@ -21,6 +21,8 @@ from .models import (
 )
 from rest_framework import viewsets, permissions, filters
 from inventory.serializers import (
+    BorrowGetSerializer,
+    BorrowPostSerializer,
     BorrowSerializer,
     BuildingSerializer,
     RoomSerializer,
@@ -164,8 +166,13 @@ class BorrowViewSet(viewsets.ModelViewSet):
     ]
 
     filter_backends = (filters.SearchFilter,)
-    serializer_class = BorrowSerializer
+    # serializer_class = BorrowSerializer
     permission_classes = [AuthorizedUserCanOnlyReadAndUpdate]
+
+    def get_serializer_class(self):
+        if self.action in ["create", "update", "partial_update", "destroy"]:
+            return BorrowPostSerializer
+        return BorrowGetSerializer
 
 
 class ComponentViewSet(viewsets.ModelViewSet):

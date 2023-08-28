@@ -91,7 +91,7 @@ class ComponentGetSerializer(serializers.HyperlinkedModelSerializer):
         depth = 5
 
 
-class BorrowSerializer(serializers.HyperlinkedModelSerializer):
+class BorrowPostSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Borrow
         fields = [
@@ -102,6 +102,20 @@ class BorrowSerializer(serializers.HyperlinkedModelSerializer):
             "borrow_in_progress",
             "component",
         ]
+
+
+class BorrowGetSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Borrow
+        fields = [
+            "url",
+            "person_who_borrowed",
+            "timestamp_check_out",
+            "timestamp_check_in",
+            "borrow_in_progress",
+            "component",
+        ]
+        depth = 4
 
     # def update(self, instance, validated_data):
     #     # Update the Foo instance
