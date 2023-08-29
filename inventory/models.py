@@ -99,7 +99,7 @@ class Borrow(ExportModelOperationsMixin("Borrow"), models.Model):
     timestamp_check_out = models.DateTimeField()
     timestamp_check_in = models.DateTimeField(null=True, blank=True)
     borrow_in_progress = models.BooleanField(default=True)
-    component = models.OneToOneField(Component, on_delete=models.CASCADE)
+    component = models.ForeignKey(Component, on_delete=models.CASCADE)
 
     def __str__(self):
         return (
