@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "rest_framework.authtoken",
     "django_filters",
+    "django_archive",
 ]
 
 CORS_ALLOWED_ORIGINS = [

@@ -1,6 +1,7 @@
 # Makerspace API 
 
 ## Contributors
+python version 3.10.6
 
 # Big thanks
 Mventory - check their repo out - most code from them
@@ -22,5 +23,8 @@ use ful links
 - https://stackoverflow.com/questions/33496333/valueerror-related-model-uapp-model-cannot-be-resolved
 
 # mile stones
-- holy shtters i finally finished some portion of the back end
-- my brain is dead what the
+
+
+# backup
+- pip install django-dbbackup
+- https://stackoverflow.com/questions/21049330/how-to-backup-a-django-db
