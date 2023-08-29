@@ -26,5 +26,5 @@ use ful links
 
 
 # backup
-- pip install django-dbbackup
+- https://django-archive.readthedocs.io/en/latest/
 - https://stackoverflow.com/questions/21049330/how-to-backup-a-django-db
