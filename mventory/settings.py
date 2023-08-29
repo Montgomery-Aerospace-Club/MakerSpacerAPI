@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "inventory.apps.InventoryConfig",
     "corsheaders",
     "rest_framework.authtoken",
+    "django_filters",
 ]
 
 CORS_ALLOWED_ORIGINS = [

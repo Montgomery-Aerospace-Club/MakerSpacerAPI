@@ -20,6 +20,7 @@ from .models import (
     User,
 )
 from rest_framework import viewsets, permissions, filters
+from django_filters import rest_framework as filters_rest
 from inventory.serializers import (
     BorrowGetSerializer,
     BorrowPostSerializer,
@@ -46,7 +47,7 @@ def index(request):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    search_fields = ["=user_id", "=email", "=username"]
+    search_fields = ["=user_id", "=email", "username"]
     filter_backends = (filters.SearchFilter,)
     permission_classes = [AuthReadOnlyPermission]
 
@@ -155,16 +156,18 @@ class StorageBinViewSet(viewsets.ModelViewSet):
 class BorrowViewSet(viewsets.ModelViewSet):
     queryset = Borrow.objects.all()
     search_fields = [
-        "=timestamp_check_out",
         "person_who_borrowed__username",
-        "=person_who_borrowed__user_id",
-        "=person_who_borrowed__email",
-        "=borrow_in_progress",  # boolean 1 and 0's
         "component__name",
         "component__description",
+        "timestamp_check_out",
+    ]
+    filterset_fields = [
+        "borrow_in_progress",
+        "person_who_borrowed__user_id",
+        "person_who_borrowed__email",
     ]
 
-    filter_backends = (filters.SearchFilter,)
+    filter_backends = [filters.SearchFilter, filters_rest.DjangoFilterBackend]
     # serializer_class = BorrowSerializer
     permission_classes = [AuthorizedUserCanOnlyReadAndUpdate]
 

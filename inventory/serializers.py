@@ -20,6 +20,12 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         fields = ["url", "username", "user_id", "email", "password"]
 
 
+class UserStudentSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = User
+        fields = ["url", "username", "user_id", "email"]
+
+
 class BuildingSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Building
@@ -92,6 +98,15 @@ class ComponentGetSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class BorrowPostSerializer(serializers.HyperlinkedModelSerializer):
+    def update(self, instance, validated_data):
+        instance.borrow_in_progress = validated_data.get(
+            "borrow_in_progress", instance.borrow_in_progress
+        )
+        instance.timestamp_check_in = validated_data.get(
+            "timestamp_check_in", instance.timestamp_check_in
+        )
+        return instance
+
     class Meta:
         model = Borrow
         fields = [
@@ -105,6 +120,8 @@ class BorrowPostSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class BorrowGetSerializer(serializers.HyperlinkedModelSerializer):
+    person_who_borrowed = UserStudentSerializer()
+
     class Meta:
         model = Borrow
         fields = [
