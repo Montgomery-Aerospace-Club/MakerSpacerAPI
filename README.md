@@ -31,3 +31,5 @@ use ful links
 
 
 https://www.reddit.com/r/django/comments/knznxb/difference_between_hosting_on_1270018000_and/
+
+add to allowed hosts

@@ -30,7 +30,7 @@ SECRET_KEY = os.getenv("MVENTORY_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = eval(os.getenv("MVENTORY_DEBUG")) or False
 
-ALLOWED_HOSTS = [os.getenv("MVENTORY_HOSTNAME"), "localhost"]
+ALLOWED_HOSTS = [os.getenv("MVENTORY_HOSTNAME"), "localhost", "192.168.86.111"]
 # APPEND_SLASH = False
 # LOGIN_REDIRECT_URL = "/"
 
