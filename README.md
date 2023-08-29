@@ -28,3 +28,6 @@ use ful links
 # backup
 - https://django-archive.readthedocs.io/en/latest/
 - https://stackoverflow.com/questions/21049330/how-to-backup-a-django-db
+
+
+https://www.reddit.com/r/django/comments/knznxb/difference_between_hosting_on_1270018000_and/
