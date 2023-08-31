@@ -215,7 +215,7 @@ class ComponentViewSet(viewsets.ModelViewSet):
     search_fields = [
         "name",
         "description",
-        # "=unique_id",
+        "=unique_id",
     ]
 
     filter_backends = [
