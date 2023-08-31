@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 from django.core.validators import MinValueValidator
 from django_prometheus.models import ExportModelOperationsMixin
@@ -9,6 +11,11 @@ from django.conf import settings
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 from rest_framework.authtoken.models import Token
+
+import barcode
+from barcode.writer import ImageWriter
+from io import BytesIO
+from django.core.files import File
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
@@ -75,6 +82,7 @@ class ComponentMeasurementUnit(
 
 
 class Component(ExportModelOperationsMixin("Component"), models.Model):
+    # unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     name = models.CharField(max_length=200)
     sku = models.CharField(max_length=100, default="", blank=True)
     mpn = models.CharField(max_length=100, default="", blank=True)
@@ -85,12 +93,20 @@ class Component(ExportModelOperationsMixin("Component"), models.Model):
     )
     qty = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     description = models.TextField(default="", blank=True)
-    # borrow = models.ForeignKey(
-    #     Borrow, on_delete=models.DO_NOTHING, null=True, blank=True
+    # barcode = models.ImageField(
+    #     upload_to="barcodes/", blank=True, default="barcodes/barcode.png"
     # )
 
     def __str__(self):
         return self.name
+
+    # def save(self, *args, **kwargs):
+    #     barclass = barcode.get_barcode_class("Code128")
+    #     code = barclass(f"{self.unique_id}", writer=ImageWriter())
+    #     buffer = BytesIO()
+    #     code.write(buffer)
+    #     self.barcode.save(f"{self.name}_{self.unique_id}.png", File(buffer), save=False)
+    #     return super().save(*args, **kwargs)
 
 
 class Borrow(ExportModelOperationsMixin("Borrow"), models.Model):

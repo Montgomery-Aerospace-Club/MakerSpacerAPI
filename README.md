@@ -36,4 +36,6 @@ add to allowed hosts
 
 # TODO:
 
-https://www.youtube.com/watch?v=VDIJ4GgKxR8
+- https://www.youtube.com/watch?v=VDIJ4GgKxR8
+- https://github.com/nathan-osman/django-archive/issues/3
+- https://docs.djangoproject.com/en/4.2/howto/initial-data/

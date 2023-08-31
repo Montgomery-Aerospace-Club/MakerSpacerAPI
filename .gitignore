@@ -172,4 +172,6 @@ Thumbs.db
 # Don't commit Assets to git otherwise we're duplicating files
 #
 assets
-archieves/
+archives/
+inventory/barcodes/
+inventory/fixtures/

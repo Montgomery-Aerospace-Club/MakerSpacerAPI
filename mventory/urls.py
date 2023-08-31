@@ -31,16 +31,20 @@ router.register(r"borrows", views.BorrowViewSet)
 router.register(r"users", views.UserViewSet)
 
 
-urlpatterns = [
-    path("", views.index),
-    path("admin/", admin.site.urls),
-    path(
-        "rest/",
-        include(
-            router.urls,
+urlpatterns = (
+    [
+        path("", views.index),
+        path("admin/", admin.site.urls),
+        path(
+            "rest/",
+            include(
+                router.urls,
+            ),
         ),
-    ),
-    path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
-    path("api-user-login/", views.UserLogIn.as_view()),
-    path("", include("django_prometheus.urls")),
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+        path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
+        path("api-user-login/", views.UserLogIn.as_view()),
+        path("", include("django_prometheus.urls")),
+    ]
+    + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+)
