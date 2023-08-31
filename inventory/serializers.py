@@ -84,7 +84,7 @@ class ComponentGetSerializer(serializers.HyperlinkedModelSerializer):
         model = Component
         fields = [
             "url",
-            # "unique_id",
+            "unique_id",
             "name",
             "sku",
             "mpn",
