@@ -218,7 +218,9 @@ class ComponentViewSet(viewsets.ModelViewSet):
         # "=unique_id",
     ]
 
-    filter_backends = filters.SearchFilter
+    filter_backends = [
+        filters.SearchFilter,
+    ]
     # serializer_class = ComponentGetSerializer
     permission_classes = [EveryoneReadOnlyPermission]
 
