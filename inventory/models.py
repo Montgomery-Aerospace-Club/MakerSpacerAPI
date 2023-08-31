@@ -93,20 +93,20 @@ class Component(ExportModelOperationsMixin("Component"), models.Model):
     )
     qty = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     description = models.TextField(default="", blank=True)
-    # barcode = models.ImageField(
-    #     upload_to="barcodes/", blank=True, default="barcodes/barcode.png"
-    # )
+    barcode = models.ImageField(
+        upload_to="barcodes/", blank=True, default="barcodes/barcode.png"
+    )
 
     def __str__(self):
         return self.name
 
-    # def save(self, *args, **kwargs):
-    #     barclass = barcode.get_barcode_class("Code128")
-    #     code = barclass(f"{self.unique_id}", writer=ImageWriter())
-    #     buffer = BytesIO()
-    #     code.write(buffer)
-    #     self.barcode.save(f"{self.name}_{self.unique_id}.png", File(buffer), save=False)
-    #     return super().save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        barclass = barcode.get_barcode_class("Code128")
+        code = barclass(f"{self.unique_id}", writer=ImageWriter())
+        buffer = BytesIO()
+        code.write(buffer)
+        self.barcode.save(f"{self.name}_{self.unique_id}.png", File(buffer), save=False)
+        return super().save(*args, **kwargs)
 
 
 class Borrow(ExportModelOperationsMixin("Borrow"), models.Model):
