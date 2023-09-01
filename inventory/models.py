@@ -110,7 +110,7 @@ class Component(ExportModelOperationsMixin("Component"), models.Model):
 
 
 class Borrow(ExportModelOperationsMixin("Borrow"), models.Model):
-    qty = models.IntegerField(default=0, validators=[MinValueValidator(0)])
+    qty = models.IntegerField(validators=[MinValueValidator(1)])
     person_who_borrowed = models.ForeignKey(User, on_delete=models.CASCADE)
     timestamp_check_out = models.DateTimeField()
     timestamp_check_in = models.DateTimeField(null=True, blank=True)
