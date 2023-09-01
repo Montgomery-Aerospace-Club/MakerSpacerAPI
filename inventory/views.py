@@ -208,7 +208,9 @@ class BorrowViewSet(viewsets.ModelViewSet):
         qty = serializer.validated_data.get("qty", None)
         comp = instance.component
 
-        if instance.person_who_borrowed.pk != request.user.pk:
+        if instance.person_who_borrowed.pk != request.user.pk and (
+            not request.user.is_staff
+        ):
             return Response(
                 {"details": ["You cannot modify someone else's borrow!"]},
                 status=status.HTTP_400_BAD_REQUEST,
