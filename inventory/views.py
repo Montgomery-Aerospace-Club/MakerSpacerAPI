@@ -168,8 +168,13 @@ class BorrowViewSet(viewsets.ModelViewSet):
         "person_who_borrowed__user_id",
         "person_who_borrowed__email",
     ]
+    ordering_fields = ["borrow_in_progress"]
 
-    filter_backends = [filters.SearchFilter, filters_rest.DjangoFilterBackend]
+    filter_backends = [
+        filters.SearchFilter,
+        filters_rest.DjangoFilterBackend,
+        filters.OrderingFilter,
+    ]
     # serializer_class = BorrowSerializer
     permission_classes = [AuthorizedUserCanOnlyReadAndUpdate]
 
@@ -308,10 +313,8 @@ class ComponentViewSet(viewsets.ModelViewSet):
 
     queryset = Component.objects.all()
     search_fields = ["name", "description", "=unique_id", "=id"]
-
-    filter_backends = [
-        filters.SearchFilter,
-    ]
+    ordering_fields = ["name"]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     # serializer_class = ComponentGetSerializer
     permission_classes = [EveryoneReadOnlyPermission]
 
