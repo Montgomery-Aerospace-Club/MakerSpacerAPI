@@ -102,10 +102,10 @@ class Component(ExportModelOperationsMixin("Component"), models.Model):
 
     def save(self, *args, **kwargs):
         barclass = barcode.get_barcode_class("Code128")
-        code = barclass(f"{self.unique_id}", writer=ImageWriter())
+        code = barclass(f"{self.pk}", writer=ImageWriter())
         buffer = BytesIO()
         code.write(buffer)
-        self.barcode.save(f"{self.name}_{self.unique_id}.png", File(buffer), save=False)
+        self.barcode.save(f"{self.name}_{self.pk}.png", File(buffer), save=False)
         return super().save(*args, **kwargs)
 
 
