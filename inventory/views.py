@@ -163,6 +163,7 @@ class BorrowViewSet(viewsets.ModelViewSet):
         "timestamp_check_out",
     ]
     filterset_fields = [
+        "component__id",
         "borrow_in_progress",
         "person_who_borrowed__user_id",
         "person_who_borrowed__email",
@@ -306,10 +307,7 @@ class ComponentViewSet(viewsets.ModelViewSet):
     """
 
     queryset = Component.objects.all()
-    search_fields = [
-        "name",
-        "description",
-    ]
+    search_fields = ["name", "description", "=unique_id", "=id"]
 
     filter_backends = [
         filters.SearchFilter,
