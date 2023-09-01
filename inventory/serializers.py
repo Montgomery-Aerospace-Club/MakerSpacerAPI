@@ -100,6 +100,7 @@ class ComponentGetSerializer(serializers.HyperlinkedModelSerializer):
 
 class BorrowPostSerializer(serializers.HyperlinkedModelSerializer):
     def update(self, instance, validated_data):
+        instance.qty = validated_data.get("qty", instance.qty)
         instance.borrow_in_progress = validated_data.get(
             "borrow_in_progress", instance.borrow_in_progress
         )

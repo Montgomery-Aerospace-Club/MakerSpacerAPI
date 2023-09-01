@@ -174,12 +174,25 @@ class BorrowViewSet(viewsets.ModelViewSet):
 
     # TODO: create and update overrides so that it verifies quantity with the component quantity as well.
     def create(self, request, *args, **kwargs):
-        qty = request.data.get("qty", 0)
-        print(qty)
-        # TODO: complete later..
-
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+
+        qty = serializer.validated_data["qty"]
+        comp = serializer.validated_data["component"]
+
+        if comp.qty - qty < 0:
+            return Response(
+                {
+                    "You cannot overborrow the item": comp.name,
+                    "Component Quantity": comp.qty,
+                    "Asked Quantity": qty,
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        comp_db = Component.objects.get(pk=comp.pk)
+        comp_db.qty -= qty
+        comp_db.save()
 
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
@@ -192,6 +205,31 @@ class BorrowViewSet(viewsets.ModelViewSet):
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
+
+        inProgress = serializer.validated_data.get("borrow_in_progress", False)
+        if (not inProgress) and (not request.user.is_staff):
+            return Response(
+                {
+                    "details": [
+                        "Cannot modify borrow_in_progress field from True to False"
+                    ]
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        qty = serializer.validated_data.get("qty", instance.qty)
+        comp = instance.component
+        if comp.qty + instance.qty - qty < 0:
+            return Response(
+                {
+                    "You cannot overborrow the item": comp.name,
+                    "Component Quantity Available (amount + old qty)": comp.qty
+                    + instance.qty,
+                    "Asked Quantity (new qty)": qty,
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         self.perform_update(serializer)
 
         if getattr(instance, "_prefetched_objects_cache", None):
