@@ -208,6 +208,12 @@ class BorrowViewSet(viewsets.ModelViewSet):
         qty = serializer.validated_data.get("qty", None)
         comp = instance.component
 
+        if instance.person_who_borrowed.pk != request.user.pk:
+            return Response(
+                {"details": ["You cannot modify someone else's borrow!"]},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         # checks if we are udating the borrow amount or not and checks if the borrow is in progress to prevent people from changing old records
         if not instance.borrow_in_progress:
             return Response(
