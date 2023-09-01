@@ -101,6 +101,7 @@ class UserLogIn(ObtainAuthToken):
                 "username": user.username,
                 "user_id": user.user_id,
                 "email": user.email,
+                "isadmin": user.is_staff,
             }
         )
 
