@@ -84,7 +84,7 @@ class ComponentMeasurementUnit(
 
 class Component(ExportModelOperationsMixin("Component"), models.Model):
     unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, unique=True)
     sku = models.CharField(max_length=100, default="", blank=True)
     mpn = models.CharField(max_length=100, default="", blank=True)
     upc = models.IntegerField(default=0, blank=True)
