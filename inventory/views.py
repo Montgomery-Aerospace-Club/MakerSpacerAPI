@@ -188,9 +188,11 @@ class BorrowViewSet(viewsets.ModelViewSet):
         if comp.qty - qty < 0:
             return Response(
                 {
-                    "You cannot overborrow the item": comp.name,
-                    "Component Quantity": comp.qty,
-                    "Asked Quantity": qty,
+                    "details": [
+                        f"You cannot overborrow the item: {comp.name}",
+                        f"Component Quantity: {comp.qty}",
+                        f"Asked Quantity: {qty}",
+                    ]
                 },
                 status=status.HTTP_400_BAD_REQUEST,
             )
@@ -233,10 +235,11 @@ class BorrowViewSet(viewsets.ModelViewSet):
             if comp.qty + instance.qty - qty < 0:
                 return Response(
                     {
-                        "You cannot overborrow the item": comp.name,
-                        "Component Quantity Available (amount + old qty)": comp.qty
-                        + instance.qty,
-                        "Asked Quantity (new qty)": qty,
+                        "details": [
+                            f"You cannot overborrow the item: {comp.name}",
+                            f"Component Quantity Available (amount + old qty): {comp.qty + instance.qty}",
+                            f"Asked Quantity (new qty): {qty}",
+                        ]
                     },
                     status=status.HTTP_400_BAD_REQUEST,
                 )
