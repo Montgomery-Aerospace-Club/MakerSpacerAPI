@@ -227,7 +227,7 @@ class BorrowViewSet(viewsets.ModelViewSet):
         # checks if we are udating the borrow amount or not and checks if the borrow is in progress to prevent people from changing old records
         if not instance.borrow_in_progress:
             return Response(
-                {"details": ["Cannot modify already returned borrows"]},
+                {"details": ["Cannot modify already returned borrow"]},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
