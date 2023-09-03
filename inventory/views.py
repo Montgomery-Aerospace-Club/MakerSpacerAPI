@@ -229,7 +229,8 @@ class BorrowViewSet(viewsets.ModelViewSet):
             return Response(
                 {
                     "details": [
-                        "Cannot modify already returned component's borrow instance"
+                        "Cannot modify already returned component's borrow instance",
+                        "This is the incorrect form if you are borrowing the item you inputed",
                     ]
                 },
                 status=status.HTTP_400_BAD_REQUEST,
