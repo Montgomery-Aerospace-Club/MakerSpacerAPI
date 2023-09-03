@@ -16,6 +16,7 @@ import barcode
 from barcode.writer import ImageWriter
 from io import BytesIO
 from django.core.files import File
+import os
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
@@ -101,11 +102,16 @@ class Component(ExportModelOperationsMixin("Component"), models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        barclass = barcode.get_barcode_class("Code128")
-        code = barclass(f"{self.pk}", writer=ImageWriter())
-        buffer = BytesIO()
-        code.write(buffer)
-        self.barcode.save(f"{self.name}_{self.pk}.png", File(buffer), save=False)
+        path = os.path.join(
+            "media", "barcodes", f"{self.name}_{self.pk}.png".replace(" ", "_")
+        )
+        if not (os.path.isfile(path)):
+            barclass = barcode.get_barcode_class("Code128")
+            code = barclass(f"{self.pk}", writer=ImageWriter())
+            buffer = BytesIO()
+            code.write(buffer)
+
+            self.barcode.save(f"{self.name}_{self.pk}.png", File(buffer), save=False)
         return super().save(*args, **kwargs)
 
 
