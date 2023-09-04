@@ -93,6 +93,7 @@ class ComponentGetSerializer(serializers.HyperlinkedModelSerializer):
             "measurement_unit",
             "qty",
             "description",
+            "barcode",
         ]
 
         depth = 5
