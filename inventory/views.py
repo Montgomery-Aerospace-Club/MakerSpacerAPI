@@ -184,6 +184,7 @@ class BorrowViewSet(viewsets.ModelViewSet):
 
         qty = serializer.validated_data["qty"]
         comp = serializer.validated_data["component"]
+        serializer.validated_data["borrow_in_progress"] = True
 
         if comp.qty - qty < 0:
             return Response(
