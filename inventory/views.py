@@ -197,6 +197,7 @@ class BorrowViewSet(viewsets.ModelViewSet):
                 },
                 status=status.HTTP_400_BAD_REQUEST,
             )
+            # TODO: create qty component returns
 
         comp_db = Component.objects.get(pk=comp.pk)
         comp_db.qty -= qty
