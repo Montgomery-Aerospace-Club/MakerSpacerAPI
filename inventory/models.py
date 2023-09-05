@@ -18,8 +18,7 @@ from io import BytesIO
 from django.core.files import File
 import os
 
-
-from import_export import resources
+from django.urls import reverse
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
@@ -44,6 +43,10 @@ class Building(ExportModelOperationsMixin("Building"), models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        """Returns the URL to access a particular instance of MyModelName."""
+        return reverse("building-detail", args=[str(self.id)])
 
 
 class Room(ExportModelOperationsMixin("Room"), models.Model):
@@ -125,6 +128,9 @@ class Borrow(ExportModelOperationsMixin("Borrow"), models.Model):
     timestamp_check_in = models.DateTimeField(null=True, blank=True)
     borrow_in_progress = models.BooleanField(default=True)
     component = models.ForeignKey(Component, on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ["timestamp_check_out"]
 
     def __str__(self):
         return (

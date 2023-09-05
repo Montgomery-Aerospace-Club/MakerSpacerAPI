@@ -39,3 +39,7 @@ add to allowed hosts
 - https://www.youtube.com/watch?v=VDIJ4GgKxR8
 - https://github.com/nathan-osman/django-archive/issues/3
 - https://docs.djangoproject.com/en/4.2/howto/initial-data/
+
+
+- https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/Generic_views
+- https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/Models

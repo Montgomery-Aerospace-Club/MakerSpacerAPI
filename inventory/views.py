@@ -39,9 +39,30 @@ from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import action
 
+from django.views import generic
+
 
 def index(request):
     return render(request, "index.html")
+
+
+class BuildingListView(generic.ListView):
+    model = Building
+    context_object_name = "building_list"
+    # query set also works
+    #  def get_queryset(self):
+    #     return Book.objects.filter(title__icontains='war')[:5] # Get 5 books containing the title war
+
+    # def get_context_data(self, **kwargs):
+    #     # Call the base implementation first to get the context
+    #     context = super(BuildingListView, self).get_context_data(**kwargs)
+    #     # Create any data and add it to the context
+    #     context['some_data'] = 'This is just some data'
+    #     return context
+
+
+class BuildingDetailView(generic.DetailView):
+    model = Building
 
 
 class UserViewSet(viewsets.ModelViewSet):

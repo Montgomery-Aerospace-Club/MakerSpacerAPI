@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Title: {{ building.title }}</h1>
+
+  {% comment %} <p><strong>Author:</strong> <a href="">{{ building.author }}</a></p>
+  <!-- author detail link not yet defined -->
+  <p><strong>Summary:</strong> {{ building.summary }}</p>
+  <p><strong>ISBN:</strong> {{ building.isbn }}</p>
+  <p><strong>Language:</strong> {{ building.language }}</p>
+  <p><strong>Genre:</strong> {{ building.genre.all|join:", " }}</p> {% endcomment %}
+
+  <div style="margin-left:20px;margin-top:20px">
+    <h4>Copies</h4>
+
+    {% for copy in building.buildinginstance_set.all %}
+      {% comment %} <hr />
+      <p
+        class="{% if copy.status == 'a' %}text-success{% elif copy.status == 'm' %}text-danger{% else %}text-warning{% endif %}">
+        {{ copy.get_status_display }}
+      </p>
+      {% if copy.status != 'a' %}
+        <p><strong>Due to be returned:</strong> {{ copy.due_back }}</p>
+      {% endif %}
+      <p><strong>Imprint:</strong> {{ copy.imprint }}</p>
+      <p class="text-muted"><strong>Id:</strong> {{ copy.id }}</p> {% endcomment %}
+    {% endfor %}
+  </div>
+{% endblock %}

@@ -33,13 +33,16 @@ router.register(r"users", views.UserViewSet)
 
 urlpatterns = (
     [
-        path("", views.index),
         path("admin/", admin.site.urls),
         path(
             "rest/",
             include(
                 router.urls,
             ),
+        ),
+        path(
+            "",
+            include("inventory.urls"),
         ),
         path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
         path("api-user-login/", views.UserLogIn.as_view()),
