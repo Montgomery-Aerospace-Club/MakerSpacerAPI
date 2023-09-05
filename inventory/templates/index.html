@@ -1,8 +1,26 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block title %}Welcome to the MakerSpaceAPI{% endblock %}
 
 {% block content %}
+
+
+  <header>
+    <div class="container">
+        <div class="col-md-6 col-sm-12 wow animated fadeInUp">
+            <div class="intro-book">
+                <img src="{% static 'img/montylogo.png'%}" alt="">
+            </div>
+        </div>
+        <div class="col-md-6 intro-text hidden-sm hidden-xs wow animated fadeInUp">
+            <h2 class="heading">Monty MakerSpace</h2>
+            <h4 class="subheading">A catalog of the workshop</h4>
+            <p>Monty MakerSpace is a workshop app for Montgomery High School's makerspace, offering borrowing, returning, sign-in, and component lookup features. It's designed to streamline operations and boost efficiency in the makerspace.</p>
+            <a href="#book" class="scrollto btn btn-white">About the App</a>
+            <a href="#" class="btn btn-green">About the Creators</a>
+        </div>
+    </div>
+</header>
   <section class="section">
     <div class="container">
       <h1 class="title">
@@ -14,5 +32,5 @@
       </div>
     </div>
   </section>
-  
+
 {% endblock %}
