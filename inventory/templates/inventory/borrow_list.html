@@ -8,9 +8,7 @@
     <ul>
       {% for borrow in borrow_list %}
       <li>
-        <a href="{{ borrow.get_absolute_url }}">{{ borrow.name }}</a>
-        ({{borrow.address}})
-        ({{borrow.postcode}})
+        <a href="{{ borrow.get_absolute_url }}">{{ borrow.id }}</a>
       </li>
       {% endfor %}
     </ul>
@@ -19,20 +17,3 @@
   {% endif %}
 {% endblock %}
 
-
-{% comment %} {% if borrow_list %}
-  <!-- code here to list the borrows -->
-  {% elif var2 %}
-{% else %}
-  <p>There are no borrows in the library.</p>
-{% endif %}
-The template uses the for and endfor template tags 
-to loop through the borrow list, as shown below. 
-Each iteration populates the
-borrow template variable with information for the current list item. 
-
-While not used here, within the loop Django will also create other variables 
-that you can use to track the iteration.
- For example, you can test the forloop.last variable to 
- perform conditional processing the last time that the loop is run. 
-{% endcomment %}
