@@ -1,33 +1,33 @@
 {% extends "base.html" %}
 
-{% block title %}List of Buildings{% endblock %}
+{% block title %}List of units{% endblock %}
 
 {% block content %}
-  <h1>Buidling List</h1>
-  {% if building_list %}
+  <h1>Unit List</h1>
+  {% if unit_list %}
     <ul>
-      {% for building in building_list %}
+      {% for unit in unit_list %}
       <li>
-        <a href="{{ building.get_absolute_url }}">{{ building.name }}</a>
+        <a href="{{ unit.get_absolute_url }}">{{ unit.name }}</a>
       </li>
       {% endfor %}
     </ul>
   {% else %}
-    <p>There are no buildings in the database.</p>
+    <p>There are no units in the database.</p>
   {% endif %}
 {% endblock %}
 
 
-{% comment %} {% if building_list %}
-  <!-- code here to list the buildings -->
+{% comment %} {% if unit_list %}
+  <!-- code here to list the units -->
   {% elif var2 %}
 {% else %}
-  <p>There are no buildings in the library.</p>
+  <p>There are no units in the library.</p>
 {% endif %}
 The template uses the for and endfor template tags 
-to loop through the building list, as shown below. 
+to loop through the unit list, as shown below. 
 Each iteration populates the
-building template variable with information for the current list item. 
+unit template variable with information for the current list item. 
 
 While not used here, within the loop Django will also create other variables 
 that you can use to track the iteration.

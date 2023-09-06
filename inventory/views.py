@@ -115,7 +115,7 @@ class BorrowDetailView(generic.DetailView):
 
 class ComponentMeasurementUnitDetailView(generic.DetailView):
     model = ComponentMeasurementUnit
-    context_object_name = "measureunit"
+    context_object_name = "unit"
 
 
 class UserViewSet(viewsets.ModelViewSet):

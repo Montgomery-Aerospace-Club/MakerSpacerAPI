@@ -1,33 +1,35 @@
 {% extends "base.html" %}
 
-{% block title %}List of rooms{% endblock %}
+{% block title %}List of bins{% endblock %}
 
 {% block content %}
-  <h1>Room List</h1>
-  {% if room_list %}
+  <h1>bin List</h1>
+  {% if bin_list %}
     <ul>
-      {% for room in room_list %}
+      {% for bin in bin_list %}
       <li>
-        <a href="{{ room.get_absolute_url }}">{{ room.name }}</a>
+        <a href="{{ bin.get_absolute_url }}">{{ bin.name }}</a>
+        ({{bin.address}})
+        ({{bin.postcode}})
       </li>
       {% endfor %}
     </ul>
   {% else %}
-    <p>There are no rooms in the database.</p>
+    <p>There are no bins in the database.</p>
   {% endif %}
 {% endblock %}
 
 
-{% comment %} {% if room_list %}
-  <!-- code here to list the rooms -->
+{% comment %} {% if bin_list %}
+  <!-- code here to list the bins -->
   {% elif var2 %}
 {% else %}
-  <p>There are no rooms in the library.</p>
+  <p>There are no bins in the library.</p>
 {% endif %}
 The template uses the for and endfor template tags 
-to loop through the room list, as shown below. 
+to loop through the bin list, as shown below. 
 Each iteration populates the
-room template variable with information for the current list item. 
+bin template variable with information for the current list item. 
 
 While not used here, within the loop Django will also create other variables 
 that you can use to track the iteration.
