@@ -57,6 +57,10 @@ class Room(ExportModelOperationsMixin("Room"), models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        """Returns the URL to access a particular instance of MyModelName."""
+        return reverse("room-detail", args=[str(self.id)])
+
 
 class StorageUnit(ExportModelOperationsMixin("StorageUnit"), models.Model):
     name = models.CharField(max_length=200)
@@ -65,6 +69,10 @@ class StorageUnit(ExportModelOperationsMixin("StorageUnit"), models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        """Returns the URL to access a particular instance of MyModelName."""
+        return reverse("unit-detail", args=[str(self.id)])
 
 
 class StorageBin(ExportModelOperationsMixin("StorageBin"), models.Model):
@@ -77,6 +85,10 @@ class StorageBin(ExportModelOperationsMixin("StorageBin"), models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        """Returns the URL to access a particular instance of MyModelName."""
+        return reverse("bin-detail", args=[str(self.id)])
+
 
 class ComponentMeasurementUnit(
     ExportModelOperationsMixin("ComponentMeasurementUnit"), models.Model
@@ -86,6 +98,10 @@ class ComponentMeasurementUnit(
 
     def __str__(self):
         return self.unit_name
+
+    def get_absolute_url(self):
+        """Returns the URL to access a particular instance of MyModelName."""
+        return reverse("compmeasurements-detail", args=[str(self.id)])
 
 
 class Component(ExportModelOperationsMixin("Component"), models.Model):
@@ -120,6 +136,10 @@ class Component(ExportModelOperationsMixin("Component"), models.Model):
             self.barcode.save(f"{self.name}_{self.pk}.png", File(buffer), save=False)
         return super().save(*args, **kwargs)
 
+    def get_absolute_url(self):
+        """Returns the URL to access a particular instance of MyModelName."""
+        return reverse("component-detail", args=[str(self.id)])
+
 
 class Borrow(ExportModelOperationsMixin("Borrow"), models.Model):
     qty = models.IntegerField(validators=[MinValueValidator(1)])
@@ -136,3 +156,7 @@ class Borrow(ExportModelOperationsMixin("Borrow"), models.Model):
         return (
             f"Borrow - Amount: {self.qty} - Person: {self.person_who_borrowed.username}"
         )
+
+    def get_absolute_url(self):
+        """Returns the URL to access a particular instance of MyModelName."""
+        return reverse("borrow-detail", args=[str(self.id)])

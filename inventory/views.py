@@ -69,6 +69,55 @@ class BuildingDetailView(generic.DetailView):
     model = Building
 
 
+class RoomListView(generic.ListView):
+    model = Room
+
+
+class RoomDetailView(generic.DetailView):
+    model = Room
+
+
+class StorageUnitListView(generic.ListView):
+    model = StorageUnit
+    context_object_name = "unit_list"
+
+
+class StorageUnitDetailView(generic.DetailView):
+    model = StorageUnit
+    context_object_name = "unit"
+
+
+class StorageBinListView(generic.ListView):
+    model = StorageBin
+    context_object_name = "bin_list"
+
+
+class StorageBinDetailView(generic.DetailView):
+    model = StorageBin
+    context_object_name = "bin"
+
+
+class ComponentListView(generic.ListView):
+    model = Component
+
+
+class ComponentDetailView(generic.DetailView):
+    model = Component
+
+
+class BorrowListView(generic.ListView):
+    model = Borrow
+
+
+class BorrowDetailView(generic.DetailView):
+    model = Borrow
+
+
+class ComponentMeasurementUnitDetailView(generic.DetailView):
+    model = ComponentMeasurementUnit
+    context_object_name = "measureunit"
+
+
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
