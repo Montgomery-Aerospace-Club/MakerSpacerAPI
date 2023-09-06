@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "django_filters",
     "django_archive",
+    "django.contrib.humanize",
 ]
 
 CORS_ALLOWED_ORIGINS = [

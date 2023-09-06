@@ -5,28 +5,30 @@
 {% block content %}
 
 
-  <header>
-    <div class="container">
-        <div class="col-md-6 col-sm-12 wow animated fadeInUp">
-            <div class="intro-book">
-                <img src="{% static 'img/montylogo.png'%}" alt="">
-            </div>
-        </div>
-        <div class="col-md-6 intro-text hidden-sm hidden-xs wow animated fadeInUp">
-            <h2 class="heading">Monty MakerSpace</h2>
-            <h4 class="subheading">A catalog of the workshop</h4>
-            <p>Monty MakerSpace is a workshop app for Montgomery High School's makerspace, offering borrowing, returning, sign-in, and component lookup features. It's designed to streamline operations and boost efficiency in the makerspace.</p>
-            <a href="#about" class="scrollto btn btn-white">About the App</a>
-            <a href="{% url 'dashboard' %}" class="btn btn-green">Go to Dashboard</a>
-        </div>
+<header>
+  <div class="container">
+    <div class="col-md-6 col-sm-12 wow animated fadeInUp">
+      <div class="intro-book">
+        <img src="{% static 'img/montylogo.png'%}" alt="">
+      </div>
     </div>
+    <div class="col-md-6 intro-text hidden-sm hidden-xs wow animated fadeInUp">
+      <h2 class="heading">Monty MakerSpace</h2>
+      <h4 class="subheading">A catalog of the workshop</h4>
+      <p>Monty MakerSpace is a workshop app for Montgomery High School's makerspace, offering borrowing, returning,
+        sign-in, and component lookup features. It's designed to streamline operations and boost efficiency in the
+        makerspace.</p>
+      <a href="#about" class="scrollto btn btn-white">About the App</a>
+      <a href="{% url 'dashboard' %}" class="btn btn-green">Go to Dashboard</a>
+    </div>
+  </div>
 </header>
 
 <nav class="navbar navbar-default">
   <div class="container">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
-     
+
       <a class="navbar-brand" href="#"><img src="{% static 'img/logo.png' %}" alt="" width=40 height=40></a>
     </div>
 
@@ -78,15 +80,15 @@
         <h2 class="heading wow animated fadeInUp">About The App</h2>
         <ul>
           <li><a href="{% url 'buildings'%}">All Buildings</a></li>
-          
+
           <li><a href="{% url 'rooms'%}">All Rooms</a></li>
           <li><a href="{% url 'units'%}">All Storage Units</a></li>
           <li><a href="{% url 'bins'%}">All Storage Bins</a></li>
           <li><a href="{% url 'components'%}">All Components</a></li>
           <li><a href="{% url 'borrows'%}">All Borrows/Returns</a></li>
-         
-        <!-- <li><a href="{% url 'buildings'%}">All Buildings</a></li>--> 
-          
+
+          <!-- <li><a href="{% url 'buildings'%}">All Buildings</a></li>-->
+
         </ul>
         {% comment %} <h4 class="subheading wow animated fadeInUp">This lovely, well-written book is concerned
           foremost with creating typography and is essential for professionals who regularly work for
