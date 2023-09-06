@@ -46,6 +46,10 @@ def index(request):
     return render(request, "index.html")
 
 
+def dashboard(request):
+    return render(request, "dashboard.html")
+
+
 class BuildingListView(generic.ListView):
     model = Building
     context_object_name = "building_list"

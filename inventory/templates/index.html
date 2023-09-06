@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}Welcome to the MakerSpaceAPI{% endblock %}
+{% block title %}Welcome to the MakerSpaceApp{% endblock %}
 
 {% block content %}
 
@@ -16,21 +16,81 @@
             <h2 class="heading">Monty MakerSpace</h2>
             <h4 class="subheading">A catalog of the workshop</h4>
             <p>Monty MakerSpace is a workshop app for Montgomery High School's makerspace, offering borrowing, returning, sign-in, and component lookup features. It's designed to streamline operations and boost efficiency in the makerspace.</p>
-            <a href="#book" class="scrollto btn btn-white">About the App</a>
-            <a href="#" class="btn btn-green">About the Creators</a>
+            <a href="#about" class="scrollto btn btn-white">About the App</a>
+            <a href="{% url 'dashboard' %}" class="btn btn-green">Go to Dashboard</a>
         </div>
     </div>
 </header>
-  <section class="section">
-    <div class="container">
-      <h1 class="title">
-        Welcome to MakerSpaceAPI, the Maker's Inventory
-      </h1>
-      <div class="box">
-        <p>MakerSpaceAPI has two ways of accessing the platform - REST or GraphQL.</p>
-        <p>If you'd like to work with the REST API, please visit <a href="/rest/">/rest/</a>, GraphQL support will be added in the very near future!</p>
+
+<nav class="navbar navbar-default">
+  <div class="container">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+     
+      <a class="navbar-brand" href="#"><img src="{% static 'img/logo.png' %}" alt="" width=40 height=40></a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav navbar-right main-nav">
+        <li><a href="#about" class="scrollto">About</a></li>
+        <li><a href="#creators" class="scrollto">Creators</a></li>
+        <li><a href="#author" class="scrollto">Author</a></li>
+        <li><a href="#contact" class="scrollto">Contact</a></li>
+        <li><a href="{% url 'dashboard' %}" class="btn btn-green">Go to Dashboard</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+<section id="about">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="book-preview">
+          <img src="{% static 'img/kindle.png' %}" class="background-device" alt="">
+          <div class="owl-book">
+            <div class="item">
+              <img src="{% static 'img/page_nothing_1.png'%}" alt="">
+              <div class="overlay">
+                <a href="{% static 'img/page_nothing_1.png'%}" class="expand" data-lightbox="book-collection"
+                  data-title=""><i class="fa fa-expand"></i></a>
+              </div>
+            </div>
+            <div class="item">
+              <img src="{% static 'img/page_nothing_2.png'%}" alt="">
+              <div class="overlay">
+                <a href="{% static 'img/page_nothing_2.png'%}" class="expand" data-lightbox="book-collection"
+                  data-title=""><i class="fa fa-expand"></i></a>
+              </div>
+            </div>
+            <div class="item">
+              <img src="{% static 'img/page_nothing_3.png'%}" alt="">
+              <div class="overlay">
+                <a href="{% static 'img/page_nothing_3.png'%}" class="expand" data-lightbox="book-collection"
+                  data-title=""><i class="fa fa-expand"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <h2 class="heading wow animated fadeInUp">About The App</h2>
+        {% comment %} <h4 class="subheading wow animated fadeInUp">This lovely, well-written book is concerned
+          foremost with creating typography and is essential for professionals who regularly work for
+          clients.</h4>
+        <p class="small wow animated fadeInUp">Author writes about designing with the correct typeface;
+          striving for rhythm, proportion, and harmony; choosing and combining type; designing pages;
+          using section heads, subheads, footnotes, and tables; applying kerning and other type
+          adjustments to improve legibility; and adding special characters, including punctuation and
+          diacritical marks. </p>
+        <p class="small wow animated fadeInUp">The Elements of Typographic Style teaches the history of
+          and the artistic and practical perspectives on a variety of type families that are available
+          in Europe and America today.</p> {% endcomment %}
       </div>
     </div>
-  </section>
+  </div>
+</section>
+
 
 {% endblock %}
