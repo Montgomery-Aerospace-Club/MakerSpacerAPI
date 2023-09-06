@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 {% load static %}
+{% load humanize %}
 
 <head>
   <title>{% block title %}{% endblock %}</title>
@@ -18,6 +19,8 @@
   <link rel="stylesheet" href="{% static 'css/owl.css' %}" type='text/css' />
   <link id="main" rel="stylesheet" href="{% static 'css/publisher.css' %}" type='text/css' />
   <link rel="stylesheet" href="{% static 'css/tooltip.css' %}" type='text/css' />
+  <link rel="stylesheet" href="{% static 'DataTables/datatables.min.css' %}">
+
 </head>
 
 <body>
@@ -36,6 +39,7 @@
   <script src="{% static 'js/preloader.js'%}"></script>
   <script src="{% static 'js/main.js'%}"></script>
   <script src="{% static 'js/bootstrap.min.js'%}"></script>
+  <script src="{% static 'DataTables/datatables.min.js' %}"></script>
 </body>
 
 </html>
