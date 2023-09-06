@@ -1,49 +1,100 @@
-{% extends "base.html" %}
-
-{% block title %}List of Buildings{% endblock %}
-
+{% extends "base.html" %} {% block title %}List of Buildings{% endblock %} 
 {% block content %}
-  <h1>Building List</h1>
-  {% if building_list %}
-    <ul>
-      {% for building in building_list %}
-      <li>
-        <a href="{{ building.get_absolute_url }}">{{ building.name }}</a>
-        ({{building.address}})
-        ({{building.postcode}})
-      </li>
-      {% endfor %}
-    </ul>
+<h1>Building List</h1>
+{% if building_list %} {%  comment %}
+<ul>
+  {% for building in building_list %}
+  <li>
+    <a href="{{ building.get_absolute_url }}">{{ building.name }}</a>
+    ({{building.address}}) ({{building.postcode}})
+  </li>
+  {% endfor %}
+</ul>
+{% endcomment %}
 
-    <div class="container-fluid" id="e-details">
-      <div class="">
-          <dl>
-              <dt>School ID</dt>
-              <dd class="ps-4">{{building.code}}</dd>
-              <dt>Department</dt>
-              <dd class="ps-4">{{building.department}}</dd>
-              <dt>Course</dt>
-              <dd class="ps-4">{{building.course}}</dd>
-              <dt>Name</dt>
-              <dd class="ps-4">{{building.name}}</dd>
-              <dt>Gender</dt>
-              <dd class="ps-4">{{building.gender}}</dd>
-              <dt>Contact #</dt>
-              <dd class="ps-4">{{building.contact}}</dd>
-              <dt>Email</dt>
-              <dd class="ps-4">{{building.email}}</dd>
-              <dt>Address</dt>
-              <dd class="ps-4">{{building.address}}</dd>
-              <dt>Status</dt>
-              <dd class="ps-4">
-                  {% if building.status == '1' %}
-                  <span class="badge badge-success bg-gradient bg-success px-3 rounded-pill bg-opacity-75 text-sm py-1">Active</span> {% else %}
-                  <span class="badge badge-secondary bg-gradient bg-secondary px-3 rounded-pill bg-opacity-75 text-sm py-1">Inactive</span> {% endif %}
-              </dd>
-          </dl>
+<section class="py-4">
+  <div class="container">
+    <h3 class="fw-bolder text-center">List of Categories</h3>
+    <center>
+      <hr > </hr>
+    </center>
+    <div class="card rounded-0 shadow">
+      <div class="card-body">
+        <div class="container-fluid">
+          <table class="table table-bordered table-striped" id="category-tbl">
+            <colcategory>
+              <col width="5%" />
+              <col width="30%" />
+              <col width="15%" />
+              <col width="15%" />
+            </colcategory>
+            <thead>
+              <tr>
+                <th class="text-center">#</th>
+                <th class="text-center">Name</th>
+                <th class="text-center">Address</th>
+                <th class="text-center">Postcode</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for cat in building_list %}
+              <tr>
+                <td class="text-center">{{ forloop.counter }}</td>
+ 
+                <td>{{ cat.name}}</td>
+                <td>
+                 {{ cat.address }}
+                </td>
+                <td>
+                  {{ cat.postcode }}
+                 </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
       </div>
+    </div>
   </div>
-  {% else %}
-    <p>There are no buildings in the database.</p>
-  {% endif %}
+</section>
+{% comment %}
+<div class="container-fluid" id="e-details">
+  <div class="">
+    <dl>
+      <dt>School ID</dt>
+      <dd class="ps-4">{{building.code}}</dd>
+      <dt>Department</dt>
+      <dd class="ps-4">{{building.department}}</dd>
+      <dt>Course</dt>
+      <dd class="ps-4">{{building.course}}</dd>
+      <dt>Name</dt>
+      <dd class="ps-4">{{building.name}}</dd>
+      <dt>Gender</dt>
+      <dd class="ps-4">{{building.gender}}</dd>
+      <dt>Contact #</dt>
+      <dd class="ps-4">{{building.contact}}</dd>
+      <dt>Email</dt>
+      <dd class="ps-4">{{building.email}}</dd>
+      <dt>Address</dt>
+      <dd class="ps-4">{{building.address}}</dd>
+      <dt>Status</dt>
+      <dd class="ps-4">
+        {% if building.status == '1' %}
+        <span
+          class="badge badge-success bg-gradient bg-success px-3 rounded-pill bg-opacity-75 text-sm py-1"
+          >Active</span
+        >
+        {% else %}
+        <span
+          class="badge badge-secondary bg-gradient bg-secondary px-3 rounded-pill bg-opacity-75 text-sm py-1"
+          >Inactive</span
+        >
+        {% endif %}
+      </dd>
+    </dl>
+  </div>
+</div>
+{% endcomment %} {% else %}
+<p>There are no buildings in the database.</p>
+{% endif %} 
 {% endblock %}
