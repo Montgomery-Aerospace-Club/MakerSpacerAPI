@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 {% load static %}
-{% load humanize %}
 
 <head>
   <title>{% block title %}{% endblock %}</title>
@@ -11,14 +10,10 @@
   <!-- Add additional CSS in static file -->
 
   <link rel="stylesheet" href="{% static 'font-awesome-4.1.0/css/font-awesome.min.css' %}" type='text/css' />
-  <link rel="stylesheet" href="{% static 'css/animate.css' %}" type='text/css' />
-  <link rel="stylesheet" href="{% static 'css/et-icons.css' %}" type='text/css' />
-  <link rel="stylesheet" href="{% static 'css/lightbox.css' %}" type='text/css' />
-  <link rel="stylesheet" href="{% static 'css/normalize.css' %}" type='text/css' />
-  <link rel="stylesheet" href="{% static 'css/owl.css' %}" type='text/css' />
-  <link id="main" rel="stylesheet" href="{% static 'css/publisher.css' %}" type='text/css' />
-  <link rel="stylesheet" href="{% static 'css/tooltip.css' %}" type='text/css' />
+
+  {% block head %} {% endblock %}
   <link rel="stylesheet" href="{% static 'DataTables/datatables.min.css' %}">
+  <script src="{% static 'DataTables/datatables.min.js' %}"></script>
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
 
@@ -31,24 +26,17 @@
   -->
 
 
+
 </head>
 
 <body>
 
 
+
   {% block content %}{% endblock %}
 
-  <script src="{% static 'js/jquery-1.11.1.min.js' %}"></script>
-  <script src="{% static 'js/owl.carousel.js'%}"></script>
-  <script src="{% static 'js/lightbox.min.js'%}"></script>
-  <script src="{% static 'js/wow.min.js'%}"></script>
-  <script src="{% static 'js/jquery.onepagenav.js'%}"></script>
-  <script src="{% static 'js/core.js'%}"></script>
-  <script src="{% static 'js/tooltip.js'%}"></script>
-  <script src="{% static 'js/jquery.form-validator.js'%}"></script>
-  <script src="{% static 'js/preloader.js'%}"></script>
-  <script src="{% static 'js/main.js'%}"></script>
-  <script src="{% static 'DataTables/datatables.min.js' %}"></script>
+ 
+  
 </body>
 
 </html>

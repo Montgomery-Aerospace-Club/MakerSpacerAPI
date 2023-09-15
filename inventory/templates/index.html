@@ -1,12 +1,47 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
 {% load static %}
-{% block title %}Welcome to the MakerSpaceApp{% endblock %}
 
-{% block content %}
 
+<head>
+  <title>Welcome to the MakerSpaceApp</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Add additional CSS in static file -->
+
+  <link rel="stylesheet" href="{% static 'font-awesome-4.1.0/css/font-awesome.min.css' %}" type='text/css' />
+
+  <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" type='text/css' />
+  <script src="{% static 'js/bootstrap.min.js'%}"></script>
+
+
+  
+  <link rel="stylesheet" href="{% static 'css/animate.css' %}" type='text/css' />
+  <link rel="stylesheet" href="{% static 'css/et-icons.css' %}" type='text/css' />
+  <link rel="stylesheet" href="{% static 'css/lightbox.css' %}" type='text/css' />
+  <link rel="stylesheet" href="{% static 'css/normalize.css' %}" type='text/css' />
+  <link rel="stylesheet" href="{% static 'css/owl.css' %}" type='text/css' />
+  <link id="main" rel="stylesheet" href="{% static 'css/publisher.css' %}" type='text/css' />
+  <link rel="stylesheet" href="{% static 'css/tooltip.css' %}" type='text/css' />
+  <script src="{% static 'js/jquery-1.11.1.min.js' %}"></script>
+  <script src="{% static 'js/owl.carousel.js'%}"></script>
+  <script src="{% static 'js/lightbox.min.js'%}"></script>
+  <script src="{% static 'js/wow.min.js'%}"></script>
+  <script src="{% static 'js/jquery.onepagenav.js'%}"></script>
+  <script src="{% static 'js/core.js'%}"></script>
+  <script src="{% static 'js/tooltip.js'%}"></script>
+  <script src="{% static 'js/jquery.form-validator.js'%}"></script>
+  <script src="{% static 'js/preloader.js'%}"></script>
+  <script src="{% static 'js/main.js'%}"></script>
+
+</head>
+
+<body>
 
 <header>
   <div class="container">
+    <div class="row">
     <div class="col-md-6 col-sm-12 wow animated fadeInUp">
       <div class="intro-book">
         <img src="{% static 'img/montylogo.png'%}" alt="">
@@ -20,6 +55,7 @@
         makerspace.</p>
       <a href="#about" class="scrollto btn btn-white">About the App</a>
       <a href="{% url 'dashboard' %}" class="btn btn-green">Go to Dashboard</a>
+    </div>
     </div>
   </div>
 </header>
@@ -44,6 +80,8 @@
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
+
+
 
 <section id="about">
   <div class="container">
@@ -106,5 +144,8 @@
   </div>
 </section>
 
+  
+</body>
 
-{% endblock %}
+</html>
+
