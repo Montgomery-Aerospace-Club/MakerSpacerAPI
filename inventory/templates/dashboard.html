@@ -4,7 +4,18 @@
 
 {% block content %}
 
+<ul>
+    <li><a href="{% url 'buildings'%}">All Buildings</a></li>
 
+    <li><a href="{% url 'rooms'%}">All Rooms</a></li>
+    <li><a href="{% url 'units'%}">All Storage Units</a></li>
+    <li><a href="{% url 'bins'%}">All Storage Bins</a></li>
+    <li><a href="{% url 'components'%}">All Components</a></li>
+    <li><a href="{% url 'borrows'%}">All Borrows/Returns</a></li>
+
+    <!-- <li><a href="{% url 'buildings'%}">All Buildings</a></li>-->
+
+</ul>
 
 
 {% endblock %}

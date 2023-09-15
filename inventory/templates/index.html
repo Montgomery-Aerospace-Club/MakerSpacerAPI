@@ -116,22 +116,12 @@
       </div>
       <div class="col-md-6">
         <h2 class="heading wow animated fadeInUp">About The App</h2>
-        <ul>
-          <li><a href="{% url 'buildings'%}">All Buildings</a></li>
+        <h4 class="subheading wow animated fadeInUp"> <a href="{% static 'files/manual.pdf'%}">Download a pdf-breakdown of the app</a></h4>
+        
+       
 
-          <li><a href="{% url 'rooms'%}">All Rooms</a></li>
-          <li><a href="{% url 'units'%}">All Storage Units</a></li>
-          <li><a href="{% url 'bins'%}">All Storage Bins</a></li>
-          <li><a href="{% url 'components'%}">All Components</a></li>
-          <li><a href="{% url 'borrows'%}">All Borrows/Returns</a></li>
-
-          <!-- <li><a href="{% url 'buildings'%}">All Buildings</a></li>-->
-
-        </ul>
-        {% comment %} <h4 class="subheading wow animated fadeInUp">This lovely, well-written book is concerned
-          foremost with creating typography and is essential for professionals who regularly work for
-          clients.</h4>
-        <p class="small wow animated fadeInUp">Author writes about designing with the correct typeface;
+        
+        {% comment %} <p class="small wow animated fadeInUp">Author writes about designing with the correct typeface;
           striving for rhythm, proportion, and harmony; choosing and combining type; designing pages;
           using section heads, subheads, footnotes, and tables; applying kerning and other type
           adjustments to improve legibility; and adding special characters, including punctuation and
