@@ -1,21 +1,83 @@
-{% extends "base.html" %}
-
-{% block title %}List of components{% endblock %}
-
+{% extends "base.html" %} 
+{% block title %}List of components{% endblock %} 
 {% block content %}
-  <h1>component List</h1>
-  {% if component_list %}
-    <ul>
-      {% for component in component_list %}
-      <li>
-        <a href="{{ component.get_absolute_url }}">{{ component.name }}</a>
-        ({{component.address}})
-        ({{component.postcode}})
-      </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>There are no components in the database.</p>
-  {% endif %}
-{% endblock %}
 
+{% if component_list %} 
+<div style="overflow-x: scroll;" class="container">
+
+    <h3 class="fw-bolder text-center">List of components</h3>
+    <center>
+      <hr > </hr>
+    </center>
+    <div class="card rounded-0 shadow">
+      <div class="card-body">
+        <div class="container-fluid">
+          <table class="table table-bordered table-striped" id="category-tbl">
+            <colcategory>
+              <col width="5%" />
+              <col width="7%" />
+              <col width="20%" />
+              <col width="20%" />
+              <col width="20%" />
+              <col width="20%" />
+              <col width="20%" />
+              <col width="5%" />
+            </colcategory>
+            <thead>
+              <tr>
+                <th >#</th>
+                <th>Name</th>
+                <th >SKU | MPN | UPC</th>
+                <th >Description</th>
+                <th >Measurement Unit</th>
+                <th >Storage Bins</th>
+                <th >Barcode</th>
+                
+                <th >Qty</th>
+              </tr>
+            </thead>
+            <tbody >
+              {% for component in component_list %}
+              <tr>
+                <td style=" vertical-align: middle;" class="text-center">{{ forloop.counter }}</td>
+ 
+                <td  style=" vertical-align: middle; text-transform: capitalize;"> <a  href="{{ component.get_absolute_url }}">{{ component.name }}</a></td>
+              
+                <td style=" vertical-align: middle; " >{{component.sku}} | {{component.mpn}} |  {{component.upc}}</td>
+                <td style=" vertical-align: middle;"><p  style="font-size:15px; line-height: 1.5;">{{ component.description }}</p></td>
+               
+              
+                
+
+                <td style=" vertical-align: middle; text-transform: capitalize; "><a  href="{{ component.measurement_unit.get_absolute_url  }}">{{ component.measurement_unit.unit_name }}</a></td>
+                
+                <td style="vertical-align: middle;  padding-left: 20px;text-transform: capitalize; "> 
+                  {% for bin in component.storage_bin.all %}
+                  
+                    <li/><a  href="{{ bin.get_absolute_url  }}">{{ bin.name }} </a></li>
+                 
+                  {% endfor %}
+                
+                </td>
+
+                <td style=" vertical-align: middle; " > 
+                  <img src="{{ component.barcode.url }} " style=" height: auto; width: 30%;">
+              
+                  <br>
+                  {{ component.barcode }}
+                </td>
+                <td style=" vertical-align: middle; ">{{ component.qty }}</td>
+              
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+   </div>
+
+{% else %}
+<p>There are no components in the database.</p>
+{% endif %} 
+{% endblock %}

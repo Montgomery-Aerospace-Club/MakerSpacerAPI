@@ -1,20 +1,37 @@
-{% extends "base.html" %} {% block title %}List of Buildings{% endblock %} 
+{% extends "base.html" %} 
+{% block title %}List of Buildings{% endblock %} 
 {% block content %}
-<h1>Building List</h1>
-{% if building_list %} {%  comment %}
-<ul>
-  {% for building in building_list %}
-  <li>
-    <a href="{{ building.get_absolute_url }}">{{ building.name }}</a>
-    ({{building.address}}) ({{building.postcode}})
-  </li>
-  {% endfor %}
-</ul>
-{% endcomment %}
+
+
+{% load static %}
+
+{% if building_list %} 
+
+{% comment %} <nav class="navbar navbar-default">
+  <div class="container">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+
+      <a class="navbar-brand" href="{% url 'dashboard' %}"><img src="{% static 'img/logo.png' %}" alt="" width=40 height=40></a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav navbar-right main-nav">
+        <li><a href="#about" class="scrollto">About</a></li>
+        <li><a href="#creators" class="scrollto">Creators</a></li>
+        <li><a href="#author" class="scrollto">Author</a></li>
+        <li><a href="#contact" class="scrollto">Contact</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav> {% endcomment %}
+
+
 
 <section class="py-4">
   <div class="container">
-    <h3 class="fw-bolder text-center">List of Categories</h3>
+    <h3 class="fw-bolder text-center">List of Buildings</h3>
     <center>
       <hr > </hr>
     </center>
@@ -37,16 +54,16 @@
               </tr>
             </thead>
             <tbody>
-              {% for cat in building_list %}
+              {% for build in building_list %}
               <tr>
                 <td class="text-center">{{ forloop.counter }}</td>
  
-                <td>{{ cat.name}}</td>
+                <td> <a  href="{{ build.get_absolute_url }}">{{ build.name }}</a></td>
                 <td>
-                 {{ cat.address }}
+                 {{ build.address }}
                 </td>
                 <td>
-                  {{ cat.postcode }}
+                  {{ build.postcode }}
                  </td>
               </tr>
               {% endfor %}

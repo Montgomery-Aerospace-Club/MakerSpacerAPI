@@ -109,7 +109,7 @@ class Component(ExportModelOperationsMixin("Component"), models.Model):
     name = models.CharField(max_length=200, unique=True)
     sku = models.CharField(max_length=100, default="", blank=True)
     mpn = models.CharField(max_length=100, default="", blank=True)
-    upc = models.IntegerField(default=0, blank=True)
+    upc = models.IntegerField(blank=True, null=True)
     storage_bin = models.ManyToManyField(StorageBin)
     measurement_unit = models.ForeignKey(
         ComponentMeasurementUnit, on_delete=models.CASCADE
