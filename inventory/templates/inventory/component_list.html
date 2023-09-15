@@ -3,12 +3,11 @@
 {% block content %}
 
 {% if component_list %} 
+<section class="py-4">
 <div style="overflow-x: scroll;" class="container">
 
     <h3 class="fw-bolder text-center">List of components</h3>
-    <center>
-      <hr > </hr>
-    </center>
+    <br>
     <div class="card rounded-0 shadow">
       <div class="card-body">
         <div class="container-fluid">
@@ -41,7 +40,7 @@
               <tr>
                 <td style=" vertical-align: middle;" class="text-center">{{ forloop.counter }}</td>
  
-                <td  style=" vertical-align: middle; text-transform: capitalize;"> <a  href="{{ component.get_absolute_url }}">{{ component.name }}</a></td>
+                <td  style=" vertical-align: middle;"> <a  href="{{ component.get_absolute_url }}">{{ component.name|capfirst }}</a></td>
               
                 <td style=" vertical-align: middle; " >{{component.sku}} | {{component.mpn}} |  {{component.upc}}</td>
                 <td style=" vertical-align: middle;"><p  style="font-size:15px; line-height: 1.5;">{{ component.description }}</p></td>
@@ -76,7 +75,7 @@
       </div>
     </div>
    </div>
-
+  </section>
 {% else %}
 <p>There are no components in the database.</p>
 {% endif %} 
