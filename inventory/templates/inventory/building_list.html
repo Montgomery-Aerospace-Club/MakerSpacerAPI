@@ -7,27 +7,6 @@
 
 {% if building_list %} 
 
-{% comment %} <nav class="navbar navbar-default">
-  <div class="container">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-
-      <a class="navbar-brand" href="{% url 'dashboard' %}"><img src="{% static 'img/logo.png' %}" alt="" width=40 height=40></a>
-    </div>
-
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav navbar-right main-nav">
-        <li><a href="#about" class="scrollto">About</a></li>
-        <li><a href="#creators" class="scrollto">Creators</a></li>
-        <li><a href="#author" class="scrollto">Author</a></li>
-        <li><a href="#contact" class="scrollto">Contact</a></li>
-      </ul>
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
-</nav> {% endcomment %}
-
-
 
 <section class="py-4">
   <div class="container">
@@ -45,7 +24,7 @@
             </colcategory>
             <thead>
               <tr>
-                <th class="text-center">#</th>
+                <th class="text-center">ID</th>
                 <th class="text-center">Name</th>
                 <th class="text-center">Address</th>
                 <th class="text-center">Postcode</th>
@@ -54,7 +33,7 @@
             <tbody>
               {% for build in building_list %}
               <tr>
-                <td class="text-center">{{ forloop.counter }}</td>
+                <td class="text-center">{{ build.pk }}</td>
  
                 <td> <a  href="{{ build.get_absolute_url }}">{{ build.name }}</a></td>
                 <td>
@@ -72,44 +51,7 @@
     </div>
   </div>
 </section>
-{% comment %}
-<div class="container-fluid" id="e-details">
-  <div class="">
-    <dl>
-      <dt>School ID</dt>
-      <dd class="ps-4">{{building.code}}</dd>
-      <dt>Department</dt>
-      <dd class="ps-4">{{building.department}}</dd>
-      <dt>Course</dt>
-      <dd class="ps-4">{{building.course}}</dd>
-      <dt>Name</dt>
-      <dd class="ps-4">{{building.name}}</dd>
-      <dt>Gender</dt>
-      <dd class="ps-4">{{building.gender}}</dd>
-      <dt>Contact #</dt>
-      <dd class="ps-4">{{building.contact}}</dd>
-      <dt>Email</dt>
-      <dd class="ps-4">{{building.email}}</dd>
-      <dt>Address</dt>
-      <dd class="ps-4">{{building.address}}</dd>
-      <dt>Status</dt>
-      <dd class="ps-4">
-        {% if building.status == '1' %}
-        <span
-          class="badge badge-success bg-gradient bg-success px-3 rounded-pill bg-opacity-75 text-sm py-1"
-          >Active</span
-        >
-        {% else %}
-        <span
-          class="badge badge-secondary bg-gradient bg-secondary px-3 rounded-pill bg-opacity-75 text-sm py-1"
-          >Inactive</span
-        >
-        {% endif %}
-      </dd>
-    </dl>
-  </div>
-</div>
-{% endcomment %} {% else %}
+ {% else %}
 <p>There are no buildings in the database.</p>
 {% endif %} 
 {% endblock %}

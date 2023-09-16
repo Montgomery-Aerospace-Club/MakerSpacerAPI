@@ -20,7 +20,7 @@
             </colcategory>
             <thead>
               <tr>
-                <th class="text-center">#</th>
+                <th class="text-center">ID</th>
                 <th class="text-center">Name</th>
                 <th class="text-center">Shortcode</th>
                 <th class="text-center">Storage Unit</th>
@@ -30,7 +30,7 @@
             <tbody>
               {% for bin in bin_list %}
               <tr>
-                <td class="text-center">{{ forloop.counter }}</td>
+                <td class="text-center">{{ bin.pk }}</td>
  
                 <td> <a  href="{{ bin.get_absolute_url }}">{{ bin.name }}</a></td>
                 <td>{{ bin.short_code }}</td>

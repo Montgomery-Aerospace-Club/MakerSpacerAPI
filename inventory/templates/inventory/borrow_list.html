@@ -23,7 +23,7 @@
             </colcategory>
             <thead>
               <tr >
-                <th class="text-center">#</th>
+                <th class="text-center">ID</th>
                 <th class="text-center">Qty borrowed</th>
                 <th class="text-center">Person Who Borrowed</th>
                 <th class="text-center">Borrow Timestamp</th>
@@ -36,7 +36,7 @@
             <tbody>
               {% for borrow in borrow_list %}
               <tr >
-                <td class="text-center"><a href="{{ borrow.get_absolute_url }}">{{ forloop.counter }}</a></td>
+                <td class="text-center"><a href="{{ borrow.get_absolute_url }}">{{ borrow.pk }}</a></td>
                 <td> {{ borrow.qty }}</td>
                 <td>
                   {% if borrow.person_who_borrowed.first_name == "" %}

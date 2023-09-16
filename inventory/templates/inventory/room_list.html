@@ -19,7 +19,7 @@
             </colcategory>
             <thead>
               <tr>
-                <th class="text-center">#</th>
+                <th class="text-center">ID</th>
                 <th class="text-center">Name</th>
                 <th class="text-center">Shortcode</th>
                 <th class="text-center">Building</th>
@@ -28,7 +28,7 @@
             <tbody>
               {% for room in room_list %}
               <tr>
-                <td class="text-center">{{ forloop.counter }}</td>
+                <td class="text-center">{{ room.pk }}</td>
  
                 <td> <a  href="{{ room.get_absolute_url }}">{{ room.name }}</a></td>
                 <td>

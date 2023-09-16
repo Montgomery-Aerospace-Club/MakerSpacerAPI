@@ -97,38 +97,6 @@ a:hover {
 	color: #6a727b;
 }
 
-hr {
-	border: 0;
-	width: 6px;
-	height: 6px;
-	border-radius: 50%;
-	background: white;
-	display: inline-block;
-}
-
-hr:before {
-	content: ' ';
-	position: relative;
-	display: inline-block;
-	width: 6px;
-	height: 6px;
-	top: -9px;
-	left: -10px;
-	border-radius: 50%;
-	background: white;
-}
-
-hr:after {
-	content: ' ';
-	position: relative;
-	display: inline-block;
-	width: 6px;
-	height: 6px;
-	top: -29px;
-	right: -10px;
-	border-radius: 50%;
-	background: white;
-}
 
 p {
 	margin: 20px 0;
@@ -197,6 +165,8 @@ header .intro-text {
 .container {
 	padding: 0 30px;
 }
+
+
 
 .main-nav {}
 

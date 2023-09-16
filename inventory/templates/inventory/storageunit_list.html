@@ -20,7 +20,7 @@
             </colcategory>
             <thead>
               <tr>
-                <th class="text-center">#</th>
+                <th class="text-center">ID</th>
                 <th class="text-center">Name</th>
                 <th class="text-center">Shortcode</th>
                 <th class="text-center">Room</th>
@@ -29,7 +29,7 @@
             <tbody>
               {% for unit in unit_list %}
               <tr>
-                <td class="text-center">{{ forloop.counter }}</td>
+                <td class="text-center">{{ unit.pk }}</td>
  
                 <td> <a  href="{{ unit.get_absolute_url }}">{{ unit.name }}</a></td>
                 <td>{{ unit.short_code }}</td>
