@@ -4,6 +4,10 @@ from inventory import views
 
 
 urlpatterns = [
+    # shared urls
+    path("login/", views.login_form, name="login_page"),
+    path("userLogin/", views.loginView, name="login"),
+    # List and Detail views
     path("", views.index, name="index"),
     path("dashboard/", views.dashboard, name="dashboard"),
     path("buildings/", views.BuildingListView.as_view(), name="buildings"),

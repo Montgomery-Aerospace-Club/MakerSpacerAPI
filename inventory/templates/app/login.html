@@ -1,0 +1,68 @@
+{% extends "base.html" %} 
+{% block title %}Login{% endblock %} 
+
+{% load humanize %}
+
+{% block content %}
+
+<div class="card">
+    <article class="card-body" style="padding-top: 0px">
+    <div class="d-flex justify-content-center">
+    
+    
+        <div class="container">
+      <div class="d-flex justify-content-center h-100">
+        <div class="card">
+          <div class="card-header">
+            <center><h3>Login In Here</h3></center>
+         
+          </div>
+          <div class="card-body">
+            <form method="POST" action="{% url 'login' %}">
+              {% csrf_token %}
+              <div class="input-group form-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">👤</span>
+                </div>
+                <input type="text" class="form-control" placeholder="username" name="username" required="">
+                
+              </div>
+              <div class="input-group form-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">🔑</span>
+                </div>
+                <input type="password" class="form-control" placeholder="password" name="password" required="">
+              </div>
+              <div class="form-group">
+                <input type="submit" name="sign-in" value="Sign In" class="btn float-left login_btn">
+              </div>
+              
+            </form>
+          </div>
+          <div class="card-footer">
+            <div class="d-flex justify-content-center">
+                  {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+    
+                        <a class="alert alert-success" style="color:red;"> {{ message }}</a>
+    
+                    {% endfor %}
+                </div>
+                {% endif %}
+                  </div>
+          </div>
+        </div>
+      </div>
+    </div>
+            
+    
+    
+    
+    
+    
+    
+    </article>
+    </div> 
+
+{% endblock %}

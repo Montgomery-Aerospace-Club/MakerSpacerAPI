@@ -41,6 +41,9 @@ from rest_framework.authtoken.models import Token
 from rest_framework.decorators import action
 
 from django.views import generic
+from django.contrib.auth import authenticate, logout
+from django.contrib import auth, messages
+from django.shortcuts import redirect, render
 
 
 def index(request):
@@ -48,7 +51,32 @@ def index(request):
 
 
 def dashboard(request):
-    return render(request, "dashboard.html")
+    return render(request, "dashboard/dashboard.html")
+
+
+def login_form(request):
+    return render(request, "app/login.html")
+
+
+def loginView(request):
+    if request.method == "POST":
+        username = request.POST["username"]
+        password = request.POST["password"]
+        user = authenticate(request, username=username, password=password)
+        request.session["token"] = ""
+        if user is not None and user.is_active:
+            auth.login(request, user)
+
+            if user.is_staff or user.is_superuser:
+                token, created = Token.objects.get_or_create(user=user)
+                request.session["token"] = token.key
+                request.session.set_expiry = 0
+
+                return redirect("dashboard")
+
+        else:
+            messages.info(request, "Invalid username or password")
+            return redirect("login_page")
 
 
 class BuildingListView(generic.ListView):
