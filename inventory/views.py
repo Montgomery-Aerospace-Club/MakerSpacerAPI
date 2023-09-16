@@ -465,7 +465,7 @@ def asearch(request):
     data = query
     print(len(data))
     if len(data) == 0:
-        return redirect("dashborad")
+        return redirect("dashboard")
     else:
         a = data
 
