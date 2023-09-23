@@ -1,4 +1,7 @@
 import itertools
+import json
+
+from django.http import HttpRequest
 from django.shortcuts import render
 from rest_framework import response, status
 from django.utils import timezone
@@ -8,7 +11,6 @@ from inventory.perms import (
     AuthorizedUserCanOnlyReadAndUpdate,
     EveryoneReadOnlyPermission,
 )
-
 
 # Create your views here.
 from .models import (
@@ -21,7 +23,6 @@ from .models import (
     ComponentMeasurementUnit,
     User,
 )
-
 
 from rest_framework import viewsets, permissions, filters
 from django_filters import rest_framework as filters_rest
@@ -38,7 +39,6 @@ from inventory.serializers import (
     ComponentPostSerializer,
 )
 
-
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
@@ -49,6 +49,8 @@ from django.contrib.auth import authenticate, logout
 from django.contrib import auth, messages
 from django.shortcuts import redirect, render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+from .encoders import UUIDEncoder
 
 
 def index(request):
@@ -77,12 +79,11 @@ def loginView(request):
         if user is not None and user.is_active:
             auth.login(request, user)
 
-            if user.is_staff or user.is_superuser:
-                token, created = Token.objects.get_or_create(user=user)
-                request.session["token"] = token.key
-                request.session.set_expiry = 0
+            token, created = Token.objects.get_or_create(user=user)
+            request.session["token"] = token.key
+            request.session.set_expiry = 0
 
-                return redirect("dashboard")
+            return redirect("dashboard")
 
         else:
             messages.info(request, "Invalid username or password")
@@ -138,6 +139,12 @@ class StorageBinDetailView(generic.DetailView):
 
 class ComponentListView(generic.ListView):
     model = Component
+
+    def get_context_data(self, **kwargs):
+        context = super(ComponentListView, self).get_context_data(**kwargs)
+
+        context["qs_json"] = json.dumps(list(Component.objects.values()), cls=UUIDEncoder)
+        return context
 
 
 class ComponentDetailView(generic.DetailView):
@@ -332,7 +339,7 @@ class BorrowViewSet(viewsets.ModelViewSet):
         comp = instance.component
 
         if instance.person_who_borrowed.pk != request.user.pk and (
-            not request.user.is_staff
+                not request.user.is_staff
         ):
             return Response(
                 {"details": ["You cannot modify someone else's borrow!"]},
@@ -394,7 +401,7 @@ class BorrowViewSet(viewsets.ModelViewSet):
             # this runs if inProgress field in the request body is false, meaning we are "closing" or "concluding" the borrow
             # this code below is to start the return "process"
             if serializer.validated_data.get(
-                "timestamp_check_in", instance.timestamp_check_in
+                    "timestamp_check_in", instance.timestamp_check_in
             ) is None and (not request.user.is_staff):
                 return Response(
                     {
@@ -457,6 +464,55 @@ class ComponentMeasurementUnitViewSet(viewsets.ModelViewSet):
     permission_classes = [EveryoneReadOnlyPermission]
 
 
+def borrowComponent(request):
+    return render(request, "dashboard/borrow.html")
+
+
+def createBorrowFromForm(request: HttpRequest):
+    print(request.body)
+    evl = BorrowViewSet.as_view({"post": "create"})(request)
+
+    components = Component.objects.all()
+
+    data = evl.data
+    status_code = evl.code
+    print(status_code)
+    print(data)
+
+    """
+    .data
+
+The unrendered, serialized data of the response.
+.status_code
+
+The numeric status code of the HTTP response.
+.content
+
+The rendered content of the response. The .render() method must have been called before .content can be accessed.
+.template_name
+
+The template_name, if supplied. Only required if HTMLRenderer or some other custom template renderer is the accepted renderer for the response.
+.accepted_renderer
+
+The renderer instance that will be used to render the response.
+
+Set automatically by the APIView or @api_view immediately before the response is returned from the view.
+.accepted_media_type
+
+The media type that was selected by the content negotiation stage.
+
+Set automatically by the APIView or @api_view immediately before the response is returned from the view.
+.renderer_context
+    """
+
+    # return BorrowViewSet.as_view({"post": "create"})(request)
+    # cont = res.content
+    # print(cont)
+    # return redirect("borrows")
+    return render(request, "dashboard/borrow.html")
+
+
+# https://stackoverflow.com/questions/4808329/can-i-call-a-view-from-within-another-view
 def asearch(request):
     query = request.GET["query"]
     print(type(query))
@@ -474,8 +530,8 @@ def asearch(request):
         qs6 = Component.objects.filter(id__exact=a).distinct()
 
         qs7 = Component.objects.all().filter(id__contains=a)
-        qs8 =Component.objects.select_related().filter(id__contains=a).distinct()
-        qs9 =Component.objects.filter(id__startswith=a).distinct()
+        qs8 = Component.objects.select_related().filter(id__contains=a).distinct()
+        qs9 = Component.objects.filter(id__startswith=a).distinct()
         qs10 = Component.objects.filter(id__endswith=a).distinct()
         qs11 = Component.objects.filter(id__istartswith=a).distinct()
         qs12 = Component.objects.all().filter(id__icontains=a)

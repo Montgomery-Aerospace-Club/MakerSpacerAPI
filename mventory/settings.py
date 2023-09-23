@@ -80,6 +80,7 @@ TEMPLATES = [
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
+                "inventory.context_processors.rest_url",
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
@@ -181,6 +182,7 @@ REST_FRAMEWORK = {
     ),
 }
 
+REST_URL="http://127.0.0.1:8000/"
 
 # SEssions
 

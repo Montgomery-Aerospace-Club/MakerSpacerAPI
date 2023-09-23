@@ -39,11 +39,14 @@ urlpatterns = (
             include(
                 router.urls,
             ),
+
         ),
         path(
             "",
             include("inventory.urls"),
+
         ),
+
         path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
         path("api-user-login/", views.UserLogIn.as_view()),
         path("", include("django_prometheus.urls")),
