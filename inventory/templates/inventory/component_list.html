@@ -6,8 +6,6 @@
 {% block content %}
     {% if component_list %}
 
-
-
         <section class="py-4">
 
             <div style="overflow-x: scroll;" class="container">
@@ -56,12 +54,111 @@
                                 </tr>
                                 </thead>
                                 <tbody id="databody">
+
                                 {% for component in component_list %}
+
+                                    <!-- Component Modal -->
+                                    <div class="modal fade" id="modal_comp_{{ component.pk }}" tabindex="-1"
+                                         role="dialog" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">
+                                                        Component Details for {{ component.name }}
+                                                        <b>{{ component.measurement_unit.unit_name }}</b></h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <b>ID</b><br>
+                                                    &nbsp; {{ component.pk }}<br>
+                                                    <b>Name</b><br>
+                                                    &nbsp; {{ component.name }}<br>
+                                                    <b>Description</b><br>
+                                                    &nbsp; {{ component.description }} <br>
+                                                    <b>UUID</b><br>
+                                                    &nbsp; {{ component.unique_id }} <br>
+                                                    <b>Barcode</b><br>
+                                                    &nbsp; <a href="{{ component.barcode.url }}">Click me</a> <br>
+                                                    <b>Qty available | unit</b><br>
+                                                    &nbsp; {{ component.qty }} {{ component.measurement_unit.unit_name }}
+                                                    <br>
+                                                    <b>Borrows of this Component (ID | qty | status )</b>
+                                                    &nbsp;
+                                                    <ul>{% for bor in component.borrow_set.all %}
+                                                        <li>
+                                                            <a href="{{ bor.get_absolute_url }}">Borrow
+                                                                {{ bor.pk }} | {{ bor.qty }} |
+                                                                {% if bor.borrow_in_progress %}
+                                                                    <span class="badge badge-success bg-gradient px-3 rounded-pill bg-opacity-75 text-sm py-1">Active</span>
+                                                                {% else %}
+                                                                    <span class="badge badge-secondary bg-gradient  px-3 rounded-pill bg-opacity-75 text-sm py-1">Inactive</span>
+                                                                {% endif %}
+                                                            </a>
+
+                                                        </li>
+                                                    {% endfor %}</ul>
+
+
+                                                    <br>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Close
+                                                    </button>
+                                                    <a href="{{ component.get_absolute_url }}" class="btn btn-primary"
+                                                       role="button">View Details in a Page</a>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Measurement Unit Modal -->
+                                    <div class="modal fade" id="modal_measure_{{ component.pk }}" tabindex="-1"
+                                         role="dialog"
+                                         aria-labelledby="MeasurementUnitModal" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">
+                                                        Measurement Unit details
+                                                        for <b>{{ component.measurement_unit.unit_name }}</b></h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <b>ID</b><br>
+                                                    &nbsp; {{ component.measurement_unit.pk }}<br>
+                                                    <b>Name</b><br>
+                                                    &nbsp; {{ component.measurement_unit.unit_name }}
+                                                    <br>
+                                                    <b>Description</b><br>
+                                                    &nbsp; {{ component.measurement_unit.unit_description }}
+                                                    <br>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Close
+                                                    </button>
+                                                    <a href="{{ component.measurement_unit.get_absolute_url }}"
+                                                       class="btn btn-primary"
+                                                       role="button">View Details in a Page</a>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <tr>
                                         <td style=" vertical-align: middle;" class="text-center">{{ component.pk }}</td>
 
                                         <td style=" vertical-align: middle;">
-                                            <a href="{{ component.get_absolute_url }}">{{ component.name|capfirst }}</a>
+                                            <a href="#modal_comp_{{ component.pk }}" data-toggle="modal"
+                                               data-target="#modal_comp_{{ component.pk }}">{{ component.name|capfirst }}</a>
                                         </td>
 
                                         <td style=" vertical-align: middle; ">{{ component.sku }} | {{ component.mpn }}
@@ -71,13 +168,61 @@
                                         </td>
 
                                         <td style=" vertical-align: middle; text-transform: capitalize; ">
+                                            <!--
                                             <a href="{{ component.measurement_unit.get_absolute_url }}">{{ component.measurement_unit.unit_name }}</a>
+                                            !-->
+                                            <a href="#modal_measure_{{ component.pk }}" data-toggle="modal"
+                                               data-target="#modal_measure_{{ component.pk }}">{{ component.measurement_unit.unit_name }}</a>
                                         </td>
 
                                         <td style="vertical-align: middle;  padding-left: 20px;text-transform: capitalize; ">
                                             {% for bin in component.storage_bin.all %}
+                                                <!-- Bin Modal -->
+                                                <div class="modal fade"
+                                                     id="modal_storbin_{{ component.pk }}_{{ bin.pk }}"
+                                                     tabindex="-1"
+                                                     role="dialog"
+                                                     aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title">
+                                                                    Storage Bin Details for
+                                                                    <b>{{ bin.name }}</b>
+                                                                </h5>
+                                                                <button type="button" class="close" data-dismiss="modal"
+                                                                        aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <b>ID</b><br>
+                                                                &nbsp; {{ bin.pk }}<br>
+                                                                <b>Name</b><br>
+                                                                &nbsp; {{ bin.name }}<br>
+                                                                <b>Shortcode</b><br>
+                                                                &nbsp; {{ bin.short_code }} <br>
+                                                                <b>Row</b><br>
+                                                                &nbsp; {{ bin.unit_row }} <br>
+                                                                <b>Col</b><br>
+                                                                &nbsp; {{ bin.unit_column }} <br>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary"
+                                                                        data-dismiss="modal">Close
+                                                                </button>
+                                                                <a href="{{ bin.get_absolute_url }}"
+                                                                   class="btn btn-primary"
+                                                                   role="button">View Details in a Page</a>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                                 <li>
-                                                    <a href="{{ bin.get_absolute_url }}">{{ bin.name }}</a>
+                                                    <a href="#modal_storbin_{{ component.pk }}_{{ bin.pk }}"
+                                                       data-toggle="modal"
+                                                       data-target="#modal_storbin_{{ component.pk }}_{{ bin.pk }}">{{ bin.name }}</a>
                                                 </li>
                                             {% endfor %}
                                         </td>
