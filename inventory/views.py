@@ -51,6 +51,7 @@ from django.shortcuts import redirect, render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from .encoders import UUIDEncoder
+from django.db.models import Q
 
 
 def index(request):
@@ -149,12 +150,22 @@ class ComponentListView(generic.ListView):
 
     def get_queryset(self):
         queryset = Component.objects.all().order_by("id")
-        if self.request.GET.get("search"):
 
+        pk = None
+        if self.request.GET.get("id"):
+            pk = self.request.GET.get("id")
+            print(pk)
+            try:
+                pk = int(pk)
+            except ValueError:
+                pk = None
+            if pk is not None:
+                queryset = Component.objects.filter(Q(id=pk)).order_by("id")
+        if self.request.GET.get("search"):
             search = self.request.GET.get("search")
             if search != "None":
-                queryset = Component.objects.filter(unique_id=search, id=search, description__icontains=search,
-                                                    name__icontains=search).order_by("id")
+                queryset = Component.objects.filter(
+                    Q(description__icontains=search) | Q(name__icontains=search)).order_by("id")
 
         return queryset
 
@@ -540,7 +551,6 @@ def asearch(request):
         # Searching for It
         qs5 = Component.objects.filter(id__iexact=a).distinct()
         qs6 = Component.objects.filter(id__exact=a).distinct()
-
         qs7 = Component.objects.all().filter(id__contains=a)
         qs8 = Component.objects.select_related().filter(id__contains=a).distinct()
         qs9 = Component.objects.filter(id__startswith=a).distinct()

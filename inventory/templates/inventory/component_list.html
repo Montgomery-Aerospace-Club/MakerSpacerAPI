@@ -13,14 +13,25 @@
             <div style="overflow-x: scroll;" class="container">
                 <h3 class="fw-bolder text-center">List of components</h3>
                 <br/>
-                <div id="search" class="container mt-3 mb-3">
-                    <input id="search_here" class="form-control" placeholder="type here to search"/>
-                </div>
+                <form action="{% url 'components' %}" class="mt-3 mb-3">
+
+
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="search" placeholder="Search for component"/>
+                        <div class="input-group-append">
+                            <button class="btn btn-info" type="submit">🚀</button>
+                        </div>
+                    </div>
+                </form>
+
 
                 <div class="card rounded-0 shadow">
                     <div class="card-body">
                         <div class="container-fluid">
                             <table class="table table-bordered table-striped" id="category-tbl">
+                                <b>Search results for: "{{ search }}"</b>
+                                <br>
+                                <a href="{% url 'components' %}">Go back</a>
                                 <colcategory>
                                     <col width="5%"/>
                                     <col width="7%"/>
