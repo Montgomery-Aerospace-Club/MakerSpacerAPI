@@ -15,11 +15,6 @@
                 <br/>
                 <div id="search" class="container mt-3 mb-3">
                     <input id="search_here" class="form-control" placeholder="type here to search"/>
-                    <div id="search-box" class="mt-3">
-                        {% for item in component_list %}
-                            <b>{{ item }}</b><br>
-                        {% endfor %}
-                    </div>
                 </div>
 
                 <div class="card rounded-0 shadow">
@@ -90,158 +85,27 @@
                         </div>
                     </div>
                 </div>
+                <div class="pagination">
+                    <span class="page-links">
+                        {% if page_obj.has_previous %}
+                            <a href="{% url 'components' %}?search={{ search }}&page={{ page_obj.previous_page_number }}">previous</a>
+                        {% endif %}
+                        <span class="page-current">
+                            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                        </span>
+                        {% if page_obj.has_next %}
+                            <a href="{% url 'components' %}?search={{ search }}&page={{ page_obj.next_page_number }}">next</a>
+                        {% endif %}
+                    </span>
+                </div>
             </div>
         </section>
+
     {% else %}
         <p>There are no components in the database.</p>
     {% endif %}
 
     {% block scripts %}
-        <script>
-            const databody = document.getElementById('databody')
 
-            // console.log(data)
-            function init() {
-                $.ajax({
-                    url: '{{ REST_URL }}rest/components/?search=',
-                    dataType: 'JSON',
-                    success: function (data) {
-                        console.log(data)
-                        //  for (var i = 0; i < data.length; i++) {
-                        //   var row =
-                        //       $('<tr> .. ..........</tr>');
-                        //    $("#table").append(row);
-                        //  }
-                    }
-                });
-            }
-
-            function search(search) {
-                console.log("search!!:" +search)
-                $.ajax({
-
-                    url: '{{ REST_URL }}rest/components/?search=' + search,
-                    dataType: 'JSON',
-                    success: function (data) {
-                        console.log(data)
-                        databody.innerHTML = '';
-                        for (let item of data) {
-                            let row = document.createElement('tr');
-
-                            let td1 = document.createElement('td');
-                            td1.style.verticalAlign = 'middle';
-                            td1.textContent = item["url"].toString().split("/components/")[1];
-                            row.appendChild(td1);
-
-                            let td2 = document.createElement('td');
-                            td2.style.verticalAlign = 'middle';
-                            let a2 = document.createElement('a');
-                            a2.href = item["url"];
-                            a2.textContent = item["name"].charAt(0).toUpperCase() + item["name"].slice(1);
-                            td2.appendChild(a2);
-                            row.appendChild(td2);
-
-
-
-                            let td3 = document.createElement('td');
-                            td3.style.verticalAlign = 'middle';
-                            td3.textContent = `${item["sku"]} | ${item["mpn"]} | ${item["upc"]}`;
-                            row.appendChild(td3);
-
-
-                            let td4 = document.createElement('td');
-                            td4.style.verticalAlign = 'middle';
-                            let p4 = document.createElement('p');
-                            p4.style.fontSize = '15px';
-                            p4.style.lineHeight = '1.5';
-                            p4.textContent = item["description"];
-                            td4.appendChild(p4);
-                            row.appendChild(td4);
-
-                            let td5 = document.createElement('td');
-                            td5.style.verticalAlign = 'middle';
-                            let a5 = document.createElement('a');
-                            a5.href = item["measurement_unit"]["url"].toString().replaceAll("/rest", "");
-                            a5.textContent = item["measurement_unit"]["unit_name"].charAt(0).toUpperCase() + item["measurement_unit"]["unit_name"].slice(1);
-                            td5.appendChild(a5);
-                            row.appendChild(td5);
-
-
-                            let td6 = document.createElement('td');
-                            td6.style.verticalAlign = 'middle';
-                            td6.style.paddingLeft = '20px';
-                            td6.style.textTransform = 'capitalize';
-                            let ul6 = document.createElement('div');
-                            for (let bin of item["storage_bin"]) {
-                                let li = document.createElement('li');
-                                let a6 = document.createElement('a');
-                                a6.href = bin["url"];
-                                a6.textContent = bin["name"];
-                                li.appendChild(a6);
-                                ul6.appendChild(li);
-                            }
-                            td6.appendChild(ul6);
-                            row.appendChild(td6);
-
-                            let td7 = document.createElement('td');
-                            td7.style.verticalAlign = 'middle';
-                            let img = document.createElement('img');
-                            img.src = item["barcode"];
-                            img.style.height = 'auto';
-                            img.style.width = '30%';
-                            let br = document.createElement('br');
-                            let barcodeText = document.createElement('span');
-                            barcodeText.textContent = item["barcode"];
-                            td7.appendChild(img);
-                            td7.appendChild(br);
-                            td7.appendChild(barcodeText);
-                            row.appendChild(td7);
-
-
-                            let td8 = document.createElement('td');
-                            td8.style.verticalAlign = 'middle';
-                            td8.textContent = item["qty"];
-                            row.appendChild(td8);
-
-
-                            databody.appendChild(row);
-
-
-
-                        }
-
-                    }
-                });
-            }
-
-            $(document).ready(init)
-            const data = '{{qs_json}}'
-
-            const rdata = JSON.parse(data.replace(/&quot;/g, '"'))
-
-            const input = document.getElementById('search_here')
-            const box = document.getElementById('search-box')
-
-            let filteredArr = []
-
-            input.addEventListener('keyup', (e) => {
-                box.innerHTML = ""
-                search(e.target.value)
-
-                //  filteredArr = rdata.filter(info => info['name'].includes(e.target.value))
-                /*
-                if (filteredArr.length > 0) {
-                     filteredArr.map(item => {
-                         box.innerHTML += `<b>${item['name']}</b><br>`
-                     })
-
-                 } else {
-                     box.innerHTML = "<b>No Results Found</b>"
-                 }
-
-                 */
-            })
-
-        </script>
     {% endblock %}
 {% endblock %}

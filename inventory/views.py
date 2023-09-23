@@ -139,12 +139,24 @@ class StorageBinDetailView(generic.DetailView):
 
 class ComponentListView(generic.ListView):
     model = Component
+    paginate_by = 5
 
     def get_context_data(self, **kwargs):
         context = super(ComponentListView, self).get_context_data(**kwargs)
-
-        context["qs_json"] = json.dumps(list(Component.objects.values()), cls=UUIDEncoder)
+        q = self.request.GET.get("search")
+        context['search'] = q
         return context
+
+    def get_queryset(self):
+        queryset = Component.objects.all().order_by("id")
+        if self.request.GET.get("search"):
+
+            search = self.request.GET.get("search")
+            if search != "None":
+                queryset = Component.objects.filter(unique_id=search, id=search, description__icontains=search,
+                                                    name__icontains=search).order_by("id")
+
+        return queryset
 
 
 class ComponentDetailView(generic.DetailView):

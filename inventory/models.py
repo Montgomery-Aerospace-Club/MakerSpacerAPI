@@ -46,7 +46,7 @@ class Building(ExportModelOperationsMixin("Building"), models.Model):
 
     def get_absolute_url(self):
         """Returns the URL to access a particular instance of MyModelName."""
-        return reverse("building-detail", args=[str(self.id)])
+        return reverse("building-website-detail", args=[str(self.id)])
 
 
 class Room(ExportModelOperationsMixin("Room"), models.Model):
@@ -59,7 +59,7 @@ class Room(ExportModelOperationsMixin("Room"), models.Model):
 
     def get_absolute_url(self):
         """Returns the URL to access a particular instance of MyModelName."""
-        return reverse("room-detail", args=[str(self.id)])
+        return reverse("room-website-detail", args=[str(self.id)])
 
 
 class StorageUnit(ExportModelOperationsMixin("StorageUnit"), models.Model):
@@ -72,7 +72,7 @@ class StorageUnit(ExportModelOperationsMixin("StorageUnit"), models.Model):
 
     def get_absolute_url(self):
         """Returns the URL to access a particular instance of MyModelName."""
-        return reverse("unit-detail", args=[str(self.id)])
+        return reverse("unit-website-detail", args=[str(self.id)])
 
 
 class StorageBin(ExportModelOperationsMixin("StorageBin"), models.Model):
@@ -87,7 +87,7 @@ class StorageBin(ExportModelOperationsMixin("StorageBin"), models.Model):
 
     def get_absolute_url(self):
         """Returns the URL to access a particular instance of MyModelName."""
-        return reverse("bin-detail", args=[str(self.id)])
+        return reverse("bin-website-detail", args=[str(self.id)])
 
 
 class ComponentMeasurementUnit(
@@ -101,7 +101,7 @@ class ComponentMeasurementUnit(
 
     def get_absolute_url(self):
         """Returns the URL to access a particular instance of MyModelName."""
-        return reverse("compmeasurements-detail", args=[str(self.id)])
+        return reverse("compmeasurements-website-detail", args=[str(self.id)])
 
 
 class Component(ExportModelOperationsMixin("Component"), models.Model):
@@ -138,7 +138,7 @@ class Component(ExportModelOperationsMixin("Component"), models.Model):
 
     def get_absolute_url(self):
         """Returns the URL to access a particular instance of MyModelName."""
-        return reverse("component-detail", args=[str(self.id)])
+        return reverse("component-website-detail", args=[str(self.id)])
 
 
 class Borrow(ExportModelOperationsMixin("Borrow"), models.Model):
@@ -159,4 +159,4 @@ class Borrow(ExportModelOperationsMixin("Borrow"), models.Model):
 
     def get_absolute_url(self):
         """Returns the URL to access a particular instance of MyModelName."""
-        return reverse("borrow-detail", args=[str(self.id)])
+        return reverse("borrow-website-detail", args=[str(self.id)])
