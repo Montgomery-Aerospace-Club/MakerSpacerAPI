@@ -69,7 +69,7 @@ def login_form(request):
 
 def logoutView(request):
     logout(request)
-    return redirect("home")
+    return redirect("dashboard")
 
 
 def loginView(request):
@@ -648,8 +648,8 @@ def createBorrowFromForm(request: HttpRequest):
 
 
         else:
-            print("not authed")
-        pass
+            messages.error(request, "You are not logged in!")
+            messages.info(request, "Login at /login/")
     # bor = Borrow()
     # bor.save()
     # print(request.POST.dict)
