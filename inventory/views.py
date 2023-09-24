@@ -131,6 +131,24 @@ class StorageUnitDetailView(generic.DetailView):
 class StorageBinListView(generic.ListView):
     model = StorageBin
     context_object_name = "bin_list"
+    paginate_by = 5
+
+    def get_context_data(self, **kwargs):
+        context = super(StorageBinListView, self).get_context_data(**kwargs)
+        q = self.request.GET.get("search")
+        context['search'] = q
+        return context
+
+    def get_queryset(self):
+        queryset = StorageBin.objects.all().order_by("id")
+
+        if self.request.GET.get("search"):
+            search = self.request.GET.get("search")
+            if search != "None":
+                queryset = StorageBin.objects.filter(
+                    Q(name__icontains=search) | Q(short_code__icontains=search)).order_by("id")
+
+        return queryset
 
 
 class StorageBinDetailView(generic.DetailView):
@@ -197,26 +215,50 @@ class BorrowListView(generic.ListView):
         context = super(BorrowListView, self).get_context_data(**kwargs)
         q = self.request.GET.get("search")
         context['search'] = q
-        compID = self.request.GET.get("component")
         comp = ""
         if self.request.GET.get("component"):
             comp = Component.objects.get(pk=self.request.GET.get("component"))
-
         context["comp"] = comp
+        user = ""
+        if self.request.GET.get("user"):
+            user = User.objects.get(pk=self.request.GET.get("user"))
+        context["user"] = user
+
+        context["users"] = User.objects.all()
         context["components"] = Component.objects.all().distinct()
         return context
 
     def get_queryset(self):
         queryset = Borrow.objects.all().order_by("-id")
+        searchOrfilters = False
+        qs = Borrow.objects.all().order_by("-id")
 
         if self.request.GET.get("search"):
             search = self.request.GET.get("search")
             if search != "None":
-                queryset = Borrow.objects.filter(
+                qs = Borrow.objects.filter(
                     Q(component__description__icontains=search) | Q(component__name__icontains=search)).order_by("-id")
+                searchOrfilters = True
+
         if self.request.GET.get("component"):
             compID = self.request.GET.get("component")
-            queryset = Borrow.objects.filter(component__pk=compID).order_by("-borrow_in_progress")
+            qs = Borrow.objects.filter(component__pk=compID).order_by("-borrow_in_progress")
+            searchOrfilters = True
+
+        if self.request.GET.get("user"):
+            userID = self.request.GET.get("user")
+            qs = Borrow.objects.filter(person_who_borrowed__pk=userID).order_by("-borrow_in_progress")
+            searchOrfilters = True
+
+        if self.request.GET.get("user") and self.request.GET.get("component"):
+            compID = self.request.GET.get("component")
+            userID = self.request.GET.get("user")
+            qs = Borrow.objects.filter(Q(person_who_borrowed__pk=userID) & Q(component__pk=compID)).order_by(
+                "-borrow_in_progress")
+            searchOrfilters = True
+
+        if searchOrfilters:
+            return qs
         return queryset
 
 

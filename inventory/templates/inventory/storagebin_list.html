@@ -1,51 +1,77 @@
-{% extends "inventory/base.html" %} 
-{% block title %}List of Bins{% endblock %} 
+{% extends "inventory/base.html" %}
+{% block title %}List of Bins{% endblock %}
 {% block content %}
 
-{% if bin_list %} 
-<section class="py-4">
-  <div class="container">
-    <h3 class="fw-bolder text-center">List of Bins</h3>
-    <br>
-    <div class="card rounded-0 shadow">
-      <div class="card-body">
-        <div class="container-fluid">
-          <table class="table table-bordered table-striped" id="category-tbl">
-            <colcategory>
-              <col width="5%" />
-              <col width="25%" />
-              <col width="20%" />
-              <col width="20%" />
-              <col width="5%" />
-            </colcategory>
-            <thead>
-              <tr>
-                <th class="text-center">ID</th>
-                <th class="text-center">Name</th>
-                <th class="text-center">Shortcode</th>
-                <th class="text-center">Storage Unit</th>
-                <th class="text-center">Row/Col</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for bin in bin_list %}
-              <tr>
-                <td class="text-center">{{ bin.pk }}</td>
- 
-                <td> <a  href="{{ bin.get_absolute_url }}">{{ bin.name }}</a></td>
-                <td>{{ bin.short_code }}</td>
-                <td> <a  href="{{ bin.storage_unit.get_absolute_url  }}">{{ bin.storage_unit.name }}</a></td>
-                <td>{{ bin.unit_row }}/{{ bin.unit_column }}</td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-{% else %}
-<p>There are no bins in the database.</p>
-{% endif %} 
+    {% if bin_list %}
+        <section class="py-4">
+            <div class="container">
+                <h3 class="fw-bolder text-center">List of Bins</h3>
+                <br>
+                <form action="{% url 'bins' %}" class="mt-3 mb-3">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="search"
+                               placeholder="Search for storage bins with name/shortcode"/>
+                        <div class="input-group-append">
+                            <button class="btn btn-info" type="submit">Submit⚒️</button>
+                        </div>
+                    </div>
+                </form>
+                <div class="card rounded-0 shadow">
+                    <div class="card-body">
+                        <div class="container-fluid">
+                            <table class="table table-bordered table-striped" id="category-tbl">
+                                <b>Search results for: "{{ search }}"</b> <br>
+                                <a href="{% url 'bins' %}">Go back</a>
+                                <colcategory>
+                                    <col width="5%"/>
+                                    <col width="25%"/>
+                                    <col width="20%"/>
+                                    <col width="20%"/>
+                                    <col width="5%"/>
+                                </colcategory>
+                                <thead>
+                                <tr>
+                                    <th class="text-center">ID</th>
+                                    <th class="text-center">Name</th>
+                                    <th class="text-center">Shortcode</th>
+                                    <th class="text-center">Storage Unit</th>
+                                    <th class="text-center">Row/Col</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for bin in bin_list %}
+                                    <tr>
+                                        <td class="text-center">{{ bin.pk }}</td>
+
+                                        <td><a href="{{ bin.get_absolute_url }}">{{ bin.name }}</a></td>
+                                        <td>{{ bin.short_code }}</td>
+                                        <td>
+                                            <a href="{{ bin.storage_unit.get_absolute_url }}">{{ bin.storage_unit.name }}</a>
+                                        </td>
+                                        <td>{{ bin.unit_row }}/{{ bin.unit_column }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="pagination">
+                    <span class="page-links">
+                        {% if page_obj.has_previous %}
+                            <a href="{% url 'bins' %}?search={{ search }}&page={{ page_obj.previous_page_number }}">previous</a>
+                        {% endif %}
+                        <span class="page-current">
+                            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                        </span>
+                        {% if page_obj.has_next %}
+                            <a href="{% url 'bins' %}?search={{ search }}&page={{ page_obj.next_page_number }}">next</a>
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+        </section>
+    {% else %}
+        <p>There are no bins in the database.</p>
+    {% endif %}
 {% endblock %}

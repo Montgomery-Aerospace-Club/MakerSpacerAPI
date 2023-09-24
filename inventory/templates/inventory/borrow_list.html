@@ -10,16 +10,33 @@
                 <br>
                 <form action="{% url 'borrows' %}" class="mt-3 mb-3">
                     <b>Filter with Components</b><br>
-                    <select class="form-control mb-3" name="component">
+                    <select class="form-control mb-3" name="component" id="component-filter">
                         <option value="">Choose a Component</option>
                         {% for comp in components %}
                             <option value="{{ comp.id }}">{{ comp.name|capfirst }}</option>
                         {% endfor %}
-
+                    </select>
+                    <b>Filter with Users</b><br>
+                    <select class="form-control mb-3" name="user" id="user-filter">
+                        <option value="">Choose a User</option>
+                        {% for user in users %}
+                            <option value="{{ user.id }}">
+                                {% if user.first_name == "" %}
+                                    {{ user.username|capfirst }}-
+                                    {{ user.email }}
+                                {% else %}
+                                    {{ user.first_name|capfirst }}
+                                    {{ user.last_name|capfirst }}-
+                                    {{ user.email }}
+                                {% endif %}
+                            </option>
+                        {% endfor %}
                     </select>
 
+
                     <div class="input-group">
-                        <input type="text" class="form-control" name="search" placeholder="Search for component"/>
+                        <input type="text" class="form-control" name="search"
+                               placeholder="Search for borrow with component name/description" id="search-input"/>
                         <div class="input-group-append">
                             <button class="btn btn-info" type="submit">Submit🔨</button>
                         </div>
@@ -31,6 +48,7 @@
                             <table class="table table-bordered table-striped" id="category-tbl">
                                 <b>Search results for: "{{ search }}"</b> <br>
                                 <b>Filter results for component: "{{ comp.name }}"</b> <br>
+                                <b>Filter results for user: "{{ user.username }}"</b> <br>
                                 <a href="{% url 'borrows' %}">Go back</a>
                                 <colcategory>
                                     <col width="5%"/>
@@ -49,7 +67,7 @@
                                     <th class="text-center">Borrow Timestamp</th>
                                     <th class="text-center">Return Timestamp</th>
 
-                                    <th class="text-center">Component</th>
+                                    <th class="text-center">Component & <br> Qty Left</th>
                                     <th class="text-center">Status</th>
                                 </tr>
                                 </thead>
@@ -75,7 +93,8 @@
                                         <td>{{ borrow.timestamp_check_in|naturalday:"M d Y" }} {{ borrow.timestamp_check_in|time:"g:i a" }}<br> {{ borrow.timestamp_check_in|naturaltime }}
                                         </td>
                                         <td>
-                                            <a href="{{ borrow.component.get_absolute_url }}">{{ borrow.component.name|capfirst }}</a>
+                                            <a href="{{ borrow.component.get_absolute_url }}">{{ borrow.component.name|capfirst }}
+                                                | {{ borrow.component.qty }}</a>
                                         </td>
                                         <td>
                                             {% if borrow.borrow_in_progress %}
@@ -94,13 +113,13 @@
                 <div class="pagination">
                     <span class="page-links">
                         {% if page_obj.has_previous %}
-                            <a href="{% url 'borrows' %}?search={{ search }}&page={{ page_obj.previous_page_number }}">previous</a>
+                            <a href="{% url 'borrows' %}?search={{ search }}&component={{ comp.id }}&user={{ user.id }}&page={{ page_obj.previous_page_number }}">previous</a>
                         {% endif %}
                         <span class="page-current">
                             Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
                         </span>
                         {% if page_obj.has_next %}
-                            <a href="{% url 'borrows' %}?search={{ search }}&page={{ page_obj.next_page_number }}">next</a>
+                            <a href="{% url 'borrows' %}?search={{ search }}&component={{ comp.id }}&user={{ user.id }}&page={{ page_obj.next_page_number }}">next</a>
                         {% endif %}
                     </span>
                 </div>
@@ -108,6 +127,31 @@
 
         </section>
     {% else %}
-        <p>There are no borrows in the database.</p>
+        <p aria-setsize="100">No borrows were found with parameters or there are no borrows in the database</p>
     {% endif %}
+    {% block scripts %}
+        <!-- Add this script tag in your HTML file, preferably at the end, just before </body> -->
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const searchInput = document.getElementById("search-input");
+                const componentSelect = document.getElementById("component-filter");
+                const userSelect =  document.getElementById("user-filter");
+
+                // Add an input event listener to the search input
+                searchInput.addEventListener("input", function () {
+                    // Check if the search input has any value
+                    if (searchInput.value.trim() !== "") {
+                        // Disable the component and user selects
+                        componentSelect.disabled = true;
+                        userSelect.disabled = true;
+                    } else {
+                        // Enable the component and user selects
+                        componentSelect.disabled = false;
+                        userSelect.disabled = false;
+                    }
+                });
+            });
+        </script>
+
+    {% endblock %}
 {% endblock %}
