@@ -32,6 +32,12 @@
                             </option>
                         {% endfor %}
                     </select>
+                    <b>Filter with Status</b><br>
+                    <select class="form-control mb-3" name="status" id="status-filter">
+                        <option value="">Choose a Status</option>
+                        <option value="True">Active (Borrowed)</option>
+                        <option value="False">Inactive (Returned)</option>
+                    </select>
 
 
                     <div class="input-group">
@@ -48,7 +54,8 @@
                             <table class="table table-bordered table-striped" id="category-tbl">
                                 <b>Search results for: "{{ search }}"</b> <br>
                                 <b>Filter results for component: "{{ comp.name }}"</b> <br>
-                                <b>Filter results for user: "{{ user.username }}"</b> <br>
+                                <b>Filter results for user: "{{ user.email }}"</b> <br>
+                                <b>Filter results for borrow/return status: "{{ status }}"</b> <br>
                                 <a href="{% url 'borrows' %}">Go back</a>
                                 <colcategory>
                                     <col width="5%"/>
@@ -113,13 +120,13 @@
                 <div class="pagination">
                     <span class="page-links">
                         {% if page_obj.has_previous %}
-                            <a href="{% url 'borrows' %}?search={{ search }}&component={{ comp.id }}&user={{ user.id }}&page={{ page_obj.previous_page_number }}">previous</a>
+                            <a href="{% url 'borrows' %}?search={{ search }}&component={{ comp.id }}&user={{ user.id }}&status={{ status }}&page={{ page_obj.previous_page_number }}">previous</a>
                         {% endif %}
                         <span class="page-current">
                             Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
                         </span>
                         {% if page_obj.has_next %}
-                            <a href="{% url 'borrows' %}?search={{ search }}&component={{ comp.id }}&user={{ user.id }}&page={{ page_obj.next_page_number }}">next</a>
+                            <a href="{% url 'borrows' %}?search={{ search }}&component={{ comp.id }}&user={{ user.id }}&status={{ status }}&page={{ page_obj.next_page_number }}">next</a>
                         {% endif %}
                     </span>
                 </div>
@@ -135,7 +142,8 @@
             document.addEventListener("DOMContentLoaded", function () {
                 const searchInput = document.getElementById("search-input");
                 const componentSelect = document.getElementById("component-filter");
-                const userSelect =  document.getElementById("user-filter");
+                const userSelect = document.getElementById("user-filter");
+                const statusSelect = document.getElementById("status-filter");
 
                 // Add an input event listener to the search input
                 searchInput.addEventListener("input", function () {
@@ -144,10 +152,12 @@
                         // Disable the component and user selects
                         componentSelect.disabled = true;
                         userSelect.disabled = true;
+                        statusSelect.disabled = true;
                     } else {
                         // Enable the component and user selects
                         componentSelect.disabled = false;
                         userSelect.disabled = false;
+                        statusSelect.disabled = false;
                     }
                 });
             });

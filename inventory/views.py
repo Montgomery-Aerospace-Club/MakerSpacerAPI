@@ -219,16 +219,21 @@ class BorrowListView(generic.ListView):
         if self.request.GET.get("component"):
             comp = Component.objects.get(pk=self.request.GET.get("component"))
         context["comp"] = comp
+
         user = ""
         if self.request.GET.get("user"):
             user = User.objects.get(pk=self.request.GET.get("user"))
         context["user"] = user
+
+        status_e = self.request.GET.get("status")
+        context["status"] = status_e
 
         context["users"] = User.objects.all()
         context["components"] = Component.objects.all().distinct()
         return context
 
     def get_queryset(self):
+
         queryset = Borrow.objects.all().order_by("-id")
         searchOrfilters = False
         qs = Borrow.objects.all().order_by("-id")
@@ -240,21 +245,60 @@ class BorrowListView(generic.ListView):
                     Q(component__description__icontains=search) | Q(component__name__icontains=search)).order_by("-id")
                 searchOrfilters = True
 
+        if self.request.GET.get("status"):
+            stat = self.request.GET.get("status")
+            if stat == "True":
+                qs = Borrow.objects.filter(borrow_in_progress=True).order_by("component__name")
+            elif stat == "False":
+                qs = Borrow.objects.filter(borrow_in_progress=False).order_by("component__name")
+            searchOrfilters = True
+
         if self.request.GET.get("component"):
             compID = self.request.GET.get("component")
-            qs = Borrow.objects.filter(component__pk=compID).order_by("-borrow_in_progress")
+            if self.request.GET.get("status"):
+                stat = self.request.GET.get("status")
+                if stat == "True":
+                    qs = Borrow.objects.filter(Q(borrow_in_progress=True) & Q(component__pk=compID)).order_by(
+                        "component__name")
+                elif stat == "False":
+                    qs = Borrow.objects.filter(Q(borrow_in_progress=False) & Q(component__pk=compID)).order_by(
+                        "component__name")
+            else:
+                qs = Borrow.objects.filter(component__pk=compID).order_by("-borrow_in_progress")
+
             searchOrfilters = True
 
         if self.request.GET.get("user"):
             userID = self.request.GET.get("user")
-            qs = Borrow.objects.filter(person_who_borrowed__pk=userID).order_by("-borrow_in_progress")
+            if self.request.GET.get("status"):
+                stat = self.request.GET.get("status")
+                if stat == "True":
+                    qs = Borrow.objects.filter(Q(borrow_in_progress=True) & Q(person_who_borrowed__pk=userID)).order_by(
+                        "component__name")
+                elif stat == "False":
+                    qs = Borrow.objects.filter(
+                        Q(borrow_in_progress=False) & Q(person_who_borrowed__pk=userID)).order_by(
+                        "component__name")
+            else:
+                qs = Borrow.objects.filter(person_who_borrowed__pk=userID).order_by("-borrow_in_progress")
+
             searchOrfilters = True
 
         if self.request.GET.get("user") and self.request.GET.get("component"):
             compID = self.request.GET.get("component")
             userID = self.request.GET.get("user")
-            qs = Borrow.objects.filter(Q(person_who_borrowed__pk=userID) & Q(component__pk=compID)).order_by(
-                "-borrow_in_progress")
+            if self.request.GET.get("status"):
+                stat = self.request.GET.get("status")
+                if stat == "True":
+                    qs = Borrow.objects.filter(Q(borrow_in_progress=True) & Q(person_who_borrowed__pk=userID) & Q(
+                        component__pk=compID)).order_by("component__name")
+                elif stat == "False":
+                    qs = Borrow.objects.filter(Q(borrow_in_progress=False) & Q(person_who_borrowed__pk=userID) & Q(
+                        component__pk=compID)).order_by("component__name")
+            else:
+                qs = Borrow.objects.filter(Q(person_who_borrowed__pk=userID) & Q(component__pk=compID)).order_by(
+                    "-borrow_in_progress")
+
             searchOrfilters = True
 
         if searchOrfilters:
