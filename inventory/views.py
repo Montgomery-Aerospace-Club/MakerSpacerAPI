@@ -140,7 +140,7 @@ class StorageBinDetailView(generic.DetailView):
 
 class ComponentListView(generic.ListView):
     model = Component
-    paginate_by = 5
+    paginate_by = 15
 
     def get_context_data(self, **kwargs):
         context = super(ComponentListView, self).get_context_data(**kwargs)
@@ -149,23 +149,23 @@ class ComponentListView(generic.ListView):
         return context
 
     def get_queryset(self):
-        queryset = Component.objects.all().order_by("id")
+        queryset = Component.objects.all().order_by("name")
 
         pk = None
         if self.request.GET.get("id"):
-            pk = self.request.GET.get("id")
+            pk = self.request.GET.get("name")
             print(pk)
             try:
                 pk = int(pk)
             except ValueError:
                 pk = None
             if pk is not None:
-                queryset = Component.objects.filter(Q(id=pk)).order_by("id")
+                queryset = Component.objects.filter(Q(id=pk)).order_by("name")
         if self.request.GET.get("search"):
             search = self.request.GET.get("search")
             if search != "None":
                 queryset = Component.objects.filter(
-                    Q(description__icontains=search) | Q(name__icontains=search)).order_by("id")
+                    Q(description__icontains=search) | Q(name__icontains=search)).order_by("name")
 
         return queryset
 
@@ -176,6 +176,48 @@ class ComponentDetailView(generic.DetailView):
 
 class BorrowListView(generic.ListView):
     model = Borrow
+    paginate_by = 15
+    """
+    search_fields = [
+        "person_who_borrowed__username",
+        "component__name",
+        "component__description",
+        "timestamp_check_out",
+    ]
+    filterset_fields = [
+        "component__id",
+        "borrow_in_progress",
+        "person_who_borrowed__user_id",
+        "person_who_borrowed__email",
+    ]
+    ordering_fields = ["borrow_in_progress"]
+    """
+
+    def get_context_data(self, **kwargs):
+        context = super(BorrowListView, self).get_context_data(**kwargs)
+        q = self.request.GET.get("search")
+        context['search'] = q
+        compID = self.request.GET.get("component")
+        comp = ""
+        if self.request.GET.get("component"):
+            comp = Component.objects.get(pk=self.request.GET.get("component"))
+
+        context["comp"] = comp
+        context["components"] = Component.objects.all().distinct()
+        return context
+
+    def get_queryset(self):
+        queryset = Borrow.objects.all().order_by("-id")
+
+        if self.request.GET.get("search"):
+            search = self.request.GET.get("search")
+            if search != "None":
+                queryset = Borrow.objects.filter(
+                    Q(component__description__icontains=search) | Q(component__name__icontains=search)).order_by("-id")
+        if self.request.GET.get("component"):
+            compID = self.request.GET.get("component")
+            queryset = Borrow.objects.filter(component__pk=compID).order_by("-borrow_in_progress")
+        return queryset
 
 
 class BorrowDetailView(generic.DetailView):

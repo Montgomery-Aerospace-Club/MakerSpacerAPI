@@ -1,71 +1,113 @@
-{% extends "inventory/base.html" %} 
-{% block title %}List of Borrows{% endblock %} 
+{% extends "inventory/base.html" %}
+{% block title %}List of Borrows{% endblock %}
 {% block content %}
-{% load humanize %}
+    {% load humanize %}
 
-{% if borrow_list %} 
-<section class="py-4">
-  <div class="container">
-    <h3 class="fw-bolder text-center">List of Borrows</h3>
-    <br>
-    <div class="card rounded-0 shadow">
-      <div class="card-body">
-        <div class="container-fluid">
-          <table class="table table-bordered table-striped" id="category-tbl">
-            <colcategory>
-              <col width="5%" />
-              <col width="7%" />
-              <col width="10%" />
-              <col width="20%" />
-              <col width="20%" />
-              <col width="15%" />
-              <col width="9%" />
-            </colcategory>
-            <thead>
-              <tr >
-                <th class="text-center">ID</th>
-                <th class="text-center">Qty borrowed</th>
-                <th class="text-center">Person Who Borrowed</th>
-                <th class="text-center">Borrow Timestamp</th>
-                <th class="text-center">Return Timestamp</th>
-               
-                <th class="text-center">Component</th>
-                <th class="text-center">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for borrow in borrow_list %}
-              <tr >
-                <td class="text-center"><a href="{{ borrow.get_absolute_url }}">{{ borrow.pk }}</a></td>
-                <td> {{ borrow.qty }}</td>
-                <td>
-                  {% if borrow.person_who_borrowed.first_name == "" %}
-                {{borrow.person_who_borrowed.username|capfirst}}<br>{{ borrow.person_who_borrowed.email  }} 
-                  {% else %}
-                 {{ borrow.person_who_borrowed.first_name|capfirst  }} {{ borrow.person_who_borrowed.last_name|capfirst  }}<br>{{ borrow.person_who_borrowed.email  }} 
-                  {% endif %}
-                 
-                </td>
-                <td>{{ borrow.timestamp_check_out|naturalday:"M d Y" }} {{ borrow.timestamp_check_out|time:"g:i a" }}<br> {{ borrow.timestamp_check_out|naturaltime}}</td>
-                <td>{{ borrow.timestamp_check_in|naturalday:"M d Y" }} {{ borrow.timestamp_check_in|time:"g:i a" }}<br> {{ borrow.timestamp_check_in|naturaltime}}</td>
-                <td> <a href="{{ borrow.component.get_absolute_url }}">{{ borrow.component.name|capfirst }}</a></td>
-                <td>
-                {% if borrow.borrow_in_progress %}
-                <span class="badge badge-success bg-gradient px-3 rounded-pill bg-opacity-75 text-sm py-1" >Active</span>
-                {% else %}
-                <span class="badge badge-secondary bg-gradient  px-3 rounded-pill bg-opacity-75 text-sm py-1">Inactive</span>
-                {% endif %}
-              </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-{% else %}
-<p>There are no borrows in the database.</p>
-{% endif %} 
+    {% if borrow_list %}
+        <section class="py-4">
+            <div class="container">
+                <h3 class="fw-bolder text-center">List of Borrows</h3>
+                <br>
+                <form action="{% url 'borrows' %}" class="mt-3 mb-3">
+                    <b>Filter with Components</b><br>
+                    <select class="form-control mb-3" name="component">
+                        <option value="">Choose a Component</option>
+                        {% for comp in components %}
+                            <option value="{{ comp.id }}">{{ comp.name|capfirst }}</option>
+                        {% endfor %}
+
+                    </select>
+
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="search" placeholder="Search for component"/>
+                        <div class="input-group-append">
+                            <button class="btn btn-info" type="submit">Submit🔨</button>
+                        </div>
+                    </div>
+                </form>
+                <div class="card rounded-0 shadow">
+                    <div class="card-body">
+                        <div class="container-fluid">
+                            <table class="table table-bordered table-striped" id="category-tbl">
+                                <b>Search results for: "{{ search }}"</b> <br>
+                                <b>Filter results for component: "{{ comp.name }}"</b> <br>
+                                <a href="{% url 'borrows' %}">Go back</a>
+                                <colcategory>
+                                    <col width="5%"/>
+                                    <col width="7%"/>
+                                    <col width="10%"/>
+                                    <col width="20%"/>
+                                    <col width="20%"/>
+                                    <col width="15%"/>
+                                    <col width="9%"/>
+                                </colcategory>
+                                <thead>
+                                <tr>
+                                    <th class="text-center">ID</th>
+                                    <th class="text-center">Qty borrowed</th>
+                                    <th class="text-center">Person Who Borrowed</th>
+                                    <th class="text-center">Borrow Timestamp</th>
+                                    <th class="text-center">Return Timestamp</th>
+
+                                    <th class="text-center">Component</th>
+                                    <th class="text-center">Status</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for borrow in borrow_list %}
+                                    <tr>
+                                        <td class="text-center"><a
+                                                href="{{ borrow.get_absolute_url }}">{{ borrow.pk }}</a></td>
+                                        <td> {{ borrow.qty }}</td>
+                                        <td>
+                                            {% if borrow.person_who_borrowed.first_name == "" %}
+                                                {{ borrow.person_who_borrowed.username|capfirst }}<br>
+                                                {{ borrow.person_who_borrowed.email }}
+                                            {% else %}
+                                                {{ borrow.person_who_borrowed.first_name|capfirst }}
+                                                {{ borrow.person_who_borrowed.last_name|capfirst }}<br>
+                                                {{ borrow.person_who_borrowed.email }}
+                                            {% endif %}
+
+                                        </td>
+                                        <td>{{ borrow.timestamp_check_out|naturalday:"M d Y" }} {{ borrow.timestamp_check_out|time:"g:i a" }}<br> {{ borrow.timestamp_check_out|naturaltime }}
+                                        </td>
+                                        <td>{{ borrow.timestamp_check_in|naturalday:"M d Y" }} {{ borrow.timestamp_check_in|time:"g:i a" }}<br> {{ borrow.timestamp_check_in|naturaltime }}
+                                        </td>
+                                        <td>
+                                            <a href="{{ borrow.component.get_absolute_url }}">{{ borrow.component.name|capfirst }}</a>
+                                        </td>
+                                        <td>
+                                            {% if borrow.borrow_in_progress %}
+                                                <span class="badge badge-success bg-gradient px-3 rounded-pill bg-opacity-75 text-sm py-1">Active</span>
+                                            {% else %}
+                                                <span class="badge badge-secondary bg-gradient  px-3 rounded-pill bg-opacity-75 text-sm py-1">Inactive</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="pagination">
+                    <span class="page-links">
+                        {% if page_obj.has_previous %}
+                            <a href="{% url 'borrows' %}?search={{ search }}&page={{ page_obj.previous_page_number }}">previous</a>
+                        {% endif %}
+                        <span class="page-current">
+                            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                        </span>
+                        {% if page_obj.has_next %}
+                            <a href="{% url 'borrows' %}?search={{ search }}&page={{ page_obj.next_page_number }}">next</a>
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+
+        </section>
+    {% else %}
+        <p>There are no borrows in the database.</p>
+    {% endif %}
 {% endblock %}
