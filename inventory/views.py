@@ -49,6 +49,7 @@ from django.contrib.auth import authenticate, logout
 from django.contrib import auth, messages
 from django.shortcuts import redirect, render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib import messages
 
 from .encoders import UUIDEncoder
 from django.db.models import Q
@@ -616,19 +617,42 @@ class ComponentMeasurementUnitViewSet(viewsets.ModelViewSet):
 
 
 def borrowComponent(request):
-    return render(request, "dashboard/borrow.html")
+    comps = Component.objects.all()
+
+    return render(request, "dashboard/borrow.html",
+                  {"components": comps, "userurl": f"http://127.0.0.1:8000/rest/users/{request.user.pk}/",
+                   "user": request.user})
 
 
 def createBorrowFromForm(request: HttpRequest):
-    print(request.body)
-    evl = BorrowViewSet.as_view({"post": "create"})(request)
+    if request.POST:
+        if request.user.is_authenticated:
+            evl = BorrowViewSet.as_view({"post": "create"})(request)
+            data = evl.data
+            # print(data)
+            status_code = evl.status_code
+            if status_code == 400:
+                if "details" in data:
+                    errors = data["details"]
+                    for error in errors:
+                        messages.error(request, error)
+                else:
+                    for key in data:
+                        errorstr = f"{key}: {data[key][0].title()}"
+                        messages.error(request, errorstr)
+            else:
+                # print("success")
+                messages.success(request, "Created borrow for component!")
+                messages.success(request, f"Copy and paste this link to view it: {data['url'].replace('/rest', '')}")
 
-    components = Component.objects.all()
 
-    data = evl.data
-    status_code = evl.code
-    print(status_code)
-    print(data)
+
+        else:
+            print("not authed")
+        pass
+    # bor = Borrow()
+    # bor.save()
+    # print(request.POST.dict)
 
     """
     .data
@@ -660,7 +684,7 @@ Set automatically by the APIView or @api_view immediately before the response is
     # cont = res.content
     # print(cont)
     # return redirect("borrows")
-    return render(request, "dashboard/borrow.html")
+    return redirect('createborrowpage')
 
 
 # https://stackoverflow.com/questions/4808329/can-i-call-a-view-from-within-another-view
