@@ -10,7 +10,7 @@ urlpatterns = [
     path("borrow/", views.borrowComponent, name="createborrowpage"),
     path("createborrow/", views.createBorrowFromForm, name="createborrow"),
     # utilities
-    path("asearch/", views.asearch, name="asearch"),
+    # path("asearch/", views.asearch, name="asearch"),
     # List and Detail views
     path("", views.index, name="index"),
     path("dashboard/", views.dashboard, name="dashboard"),

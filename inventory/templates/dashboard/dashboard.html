@@ -13,9 +13,9 @@
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
 
     <!-- Navbar Search -->
-    <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0" action="{% url 'asearch' %}">
+    <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0" action="{% url 'components' %}">
       <div class="input-group">
-        <input type="text" class="form-control" name="query" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2" />
+        <input type="text" class="form-control" name="search" placeholder="Search for component" aria-label="Search" aria-describedby="basic-addon2" />
         <div class="input-group-append">
           <button class="btn btn-info" type="submit">🚀</button>
         </div>
@@ -69,9 +69,9 @@
     <!-- Sidebar -->
     <ul class="sidebar navbar-nav">
       <li class="nav-item active">
-        <a class="nav-link" href="{% url 'dashboard' %}">
+        <a class="nav-link" href="/admin/}">
           <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span>Dashboard</span>
+          <span>Admin Dashboard</span>
         </a>
       </li>
       <li class="nav-item active">
