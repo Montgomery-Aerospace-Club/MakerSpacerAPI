@@ -59,17 +59,17 @@
                         {% for message in messages %}
                             {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
                                 <div class="alert alert-danger " role="alert">
-                                    <b>❌Please fix the error below:</b>
+                                    <b>Please fix the error below:</b>
                                     <div class={{ message.tags }}>{{ message }}</div>
                                 </div>
                             {% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
                                 <div class="alert alert-success {{ message.tags }}" role="alert">
-                                    <b>✅Success!</b>
+                                    <b>Success!</b>
                                     <div class={{ message.tags }}>{{ message }}</div>
                                 </div>
                             {% elif message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
                                 <div class="alert alert-info" role="alert">
-                                    <b>⚠️FYI:</b>
+                                    <b>FYI:</b>
                                     <div class={{ message.tags }}>{{ message }}</div>
                                 </div>
                             {% endif %}

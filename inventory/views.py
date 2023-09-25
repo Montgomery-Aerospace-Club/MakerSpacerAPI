@@ -640,8 +640,13 @@ class ComponentMeasurementUnitViewSet(viewsets.ModelViewSet):
 def borrowComponent(request: HttpRequest):
     comps = Component.objects.all()
     if not request.user.is_authenticated:
-        messages.error(request, "You are not logged in!")
-        messages.info(request, "Login at /login/ or go to dashboard")
+        messages.error(
+            request, "You need to be logged in in order to borrow makerspace items!"
+        )
+        messages.info(
+            request,
+            "You are currently not logged in! Login at /login/ or go to dashboard",
+        )
 
     return render(
         request,
