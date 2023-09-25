@@ -559,7 +559,7 @@ class BorrowViewSet(viewsets.ModelViewSet):
             return Response(serializer.data)
 
         else:  # looks like we are not updating the qty, lets take a look at the other two fields
-            inProgress = serializer.validated_data.get("borrow_in_progress", False)
+            inProgress = serializer.validated_data.get("borrow_in_progress", True)
             if inProgress and (not request.user.is_staff):
                 return Response(
                     {
@@ -688,3 +688,56 @@ def createBorrowFromForm(request: HttpRequest):
             messages.info(request, "Login at /login/")
 
     return redirect("createborrowpage")
+
+
+def returnComponent(request: HttpRequest):
+    comps = Component.objects.all()
+    if not request.user.is_authenticated:
+        messages.error(
+            request, "You need to be logged in in order to return your items!"
+        )
+        messages.info(
+            request,
+            "You are currently not logged in! Login at /login/ or go to dashboard",
+        )
+        return render(
+            request,
+            "dashboard/return.html",
+        )
+
+    return render(
+        request,
+        "dashboard/return.html",
+        {
+            "components": comps,
+            "userurl": f"http://127.0.0.1:8000/rest/users/{request.user.pk}/",
+            "user": request.user,
+        },
+    )
+
+
+def createReturnForm(request: HttpRequest):
+    if request.POST:
+        if request.user.is_authenticated:
+            evl = BorrowViewSet.as_view({"post": "update"})(request)
+            data = evl.data
+            # print(data)
+            status_code = evl.status_code
+            if status_code == 400:
+                if "details" in data:
+                    errors = data["details"]
+                    for error in errors:
+                        messages.error(request, error)
+                else:
+                    for key in data:
+                        errorstr = f"{key}: {data[key][0].title()}"
+                        messages.error(request, errorstr)
+            else:
+                # print("success")
+                messages.success(request, "Returned component!")
+
+        else:
+            messages.error(request, "You are not logged in!")
+            messages.info(request, "Login at /login/")
+
+    return redirect("returncomponentpage")

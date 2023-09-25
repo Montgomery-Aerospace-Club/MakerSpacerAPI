@@ -9,6 +9,8 @@ urlpatterns = [
     path("logout/", views.logoutView, name="logout"),
     path("borrow/", views.borrowComponent, name="createborrowpage"),
     path("createborrow/", views.createBorrowFromForm, name="createborrow"),
+    path("return/", views.returnComponent, name="returncomponentpage"),
+    path("createreturn/", views.createReturnForm, name="returncomponent"),
     # utilities
     # path("asearch/", views.asearch, name="asearch"),
     # List and Detail views
