@@ -137,7 +137,7 @@ class StorageBinListView(generic.ListView):
     def get_context_data(self, **kwargs):
         context = super(StorageBinListView, self).get_context_data(**kwargs)
         q = self.request.GET.get("search")
-        context['search'] = q
+        context["search"] = q
         return context
 
     def get_queryset(self):
@@ -147,7 +147,8 @@ class StorageBinListView(generic.ListView):
             search = self.request.GET.get("search")
             if search != "None":
                 queryset = StorageBin.objects.filter(
-                    Q(name__icontains=search) | Q(short_code__icontains=search)).order_by("id")
+                    Q(name__icontains=search) | Q(short_code__icontains=search)
+                ).order_by("id")
 
         return queryset
 
@@ -164,7 +165,7 @@ class ComponentListView(generic.ListView):
     def get_context_data(self, **kwargs):
         context = super(ComponentListView, self).get_context_data(**kwargs)
         q = self.request.GET.get("search")
-        context['search'] = q
+        context["search"] = q
         return context
 
     def get_queryset(self):
@@ -184,7 +185,8 @@ class ComponentListView(generic.ListView):
             search = self.request.GET.get("search")
             if search != "None":
                 queryset = Component.objects.filter(
-                    Q(description__icontains=search) | Q(name__icontains=search)).order_by("name")
+                    Q(description__icontains=search) | Q(name__icontains=search)
+                ).order_by("name")
 
         return queryset
 
@@ -215,7 +217,7 @@ class BorrowListView(generic.ListView):
     def get_context_data(self, **kwargs):
         context = super(BorrowListView, self).get_context_data(**kwargs)
         q = self.request.GET.get("search")
-        context['search'] = q
+        context["search"] = q
         comp = ""
         if self.request.GET.get("component"):
             comp = Component.objects.get(pk=self.request.GET.get("component"))
@@ -234,7 +236,6 @@ class BorrowListView(generic.ListView):
         return context
 
     def get_queryset(self):
-
         queryset = Borrow.objects.all().order_by("-id")
         searchOrfilters = False
         qs = Borrow.objects.all().order_by("-id")
@@ -243,15 +244,21 @@ class BorrowListView(generic.ListView):
             search = self.request.GET.get("search")
             if search != "None":
                 qs = Borrow.objects.filter(
-                    Q(component__description__icontains=search) | Q(component__name__icontains=search)).order_by("-id")
+                    Q(component__description__icontains=search)
+                    | Q(component__name__icontains=search)
+                ).order_by("-id")
                 searchOrfilters = True
 
         if self.request.GET.get("status"):
             stat = self.request.GET.get("status")
             if stat == "True":
-                qs = Borrow.objects.filter(borrow_in_progress=True).order_by("component__name")
+                qs = Borrow.objects.filter(borrow_in_progress=True).order_by(
+                    "component__name"
+                )
             elif stat == "False":
-                qs = Borrow.objects.filter(borrow_in_progress=False).order_by("component__name")
+                qs = Borrow.objects.filter(borrow_in_progress=False).order_by(
+                    "component__name"
+                )
             searchOrfilters = True
 
         if self.request.GET.get("component"):
@@ -259,13 +266,17 @@ class BorrowListView(generic.ListView):
             if self.request.GET.get("status"):
                 stat = self.request.GET.get("status")
                 if stat == "True":
-                    qs = Borrow.objects.filter(Q(borrow_in_progress=True) & Q(component__pk=compID)).order_by(
-                        "component__name")
+                    qs = Borrow.objects.filter(
+                        Q(borrow_in_progress=True) & Q(component__pk=compID)
+                    ).order_by("component__name")
                 elif stat == "False":
-                    qs = Borrow.objects.filter(Q(borrow_in_progress=False) & Q(component__pk=compID)).order_by(
-                        "component__name")
+                    qs = Borrow.objects.filter(
+                        Q(borrow_in_progress=False) & Q(component__pk=compID)
+                    ).order_by("component__name")
             else:
-                qs = Borrow.objects.filter(component__pk=compID).order_by("-borrow_in_progress")
+                qs = Borrow.objects.filter(component__pk=compID).order_by(
+                    "-borrow_in_progress"
+                )
 
             searchOrfilters = True
 
@@ -274,14 +285,17 @@ class BorrowListView(generic.ListView):
             if self.request.GET.get("status"):
                 stat = self.request.GET.get("status")
                 if stat == "True":
-                    qs = Borrow.objects.filter(Q(borrow_in_progress=True) & Q(person_who_borrowed__pk=userID)).order_by(
-                        "component__name")
+                    qs = Borrow.objects.filter(
+                        Q(borrow_in_progress=True) & Q(person_who_borrowed__pk=userID)
+                    ).order_by("component__name")
                 elif stat == "False":
                     qs = Borrow.objects.filter(
-                        Q(borrow_in_progress=False) & Q(person_who_borrowed__pk=userID)).order_by(
-                        "component__name")
+                        Q(borrow_in_progress=False) & Q(person_who_borrowed__pk=userID)
+                    ).order_by("component__name")
             else:
-                qs = Borrow.objects.filter(person_who_borrowed__pk=userID).order_by("-borrow_in_progress")
+                qs = Borrow.objects.filter(person_who_borrowed__pk=userID).order_by(
+                    "-borrow_in_progress"
+                )
 
             searchOrfilters = True
 
@@ -291,14 +305,21 @@ class BorrowListView(generic.ListView):
             if self.request.GET.get("status"):
                 stat = self.request.GET.get("status")
                 if stat == "True":
-                    qs = Borrow.objects.filter(Q(borrow_in_progress=True) & Q(person_who_borrowed__pk=userID) & Q(
-                        component__pk=compID)).order_by("component__name")
+                    qs = Borrow.objects.filter(
+                        Q(borrow_in_progress=True)
+                        & Q(person_who_borrowed__pk=userID)
+                        & Q(component__pk=compID)
+                    ).order_by("component__name")
                 elif stat == "False":
-                    qs = Borrow.objects.filter(Q(borrow_in_progress=False) & Q(person_who_borrowed__pk=userID) & Q(
-                        component__pk=compID)).order_by("component__name")
+                    qs = Borrow.objects.filter(
+                        Q(borrow_in_progress=False)
+                        & Q(person_who_borrowed__pk=userID)
+                        & Q(component__pk=compID)
+                    ).order_by("component__name")
             else:
-                qs = Borrow.objects.filter(Q(person_who_borrowed__pk=userID) & Q(component__pk=compID)).order_by(
-                    "-borrow_in_progress")
+                qs = Borrow.objects.filter(
+                    Q(person_who_borrowed__pk=userID) & Q(component__pk=compID)
+                ).order_by("-borrow_in_progress")
 
             searchOrfilters = True
 
@@ -491,7 +512,7 @@ class BorrowViewSet(viewsets.ModelViewSet):
         comp = instance.component
 
         if instance.person_who_borrowed.pk != request.user.pk and (
-                not request.user.is_staff
+            not request.user.is_staff
         ):
             return Response(
                 {"details": ["You cannot modify someone else's borrow!"]},
@@ -553,7 +574,7 @@ class BorrowViewSet(viewsets.ModelViewSet):
             # this runs if inProgress field in the request body is false, meaning we are "closing" or "concluding" the borrow
             # this code below is to start the return "process"
             if serializer.validated_data.get(
-                    "timestamp_check_in", instance.timestamp_check_in
+                "timestamp_check_in", instance.timestamp_check_in
             ) is None and (not request.user.is_staff):
                 return Response(
                     {
@@ -616,12 +637,21 @@ class ComponentMeasurementUnitViewSet(viewsets.ModelViewSet):
     permission_classes = [EveryoneReadOnlyPermission]
 
 
-def borrowComponent(request):
+def borrowComponent(request: HttpRequest):
     comps = Component.objects.all()
+    if not request.user.is_authenticated:
+        messages.error(request, "You are not logged in!")
+        messages.info(request, "Login at /login/ or go to dashboard")
 
-    return render(request, "dashboard/borrow.html",
-                  {"components": comps, "userurl": f"http://127.0.0.1:8000/rest/users/{request.user.pk}/",
-                   "user": request.user})
+    return render(
+        request,
+        "dashboard/borrow.html",
+        {
+            "components": comps,
+            "userurl": f"http://127.0.0.1:8000/rest/users/{request.user.pk}/",
+            "user": request.user,
+        },
+    )
 
 
 def createBorrowFromForm(request: HttpRequest):
@@ -643,48 +673,16 @@ def createBorrowFromForm(request: HttpRequest):
             else:
                 # print("success")
                 messages.success(request, "Created borrow for component!")
-                messages.success(request, f"Copy and paste this link to view it: {data['url'].replace('/rest', '')}")
-
-
+                messages.success(
+                    request,
+                    f"Copy and paste this link to view it: {data['url'].replace('/rest', '')}",
+                )
 
         else:
             messages.error(request, "You are not logged in!")
             messages.info(request, "Login at /login/")
-    # bor = Borrow()
-    # bor.save()
-    # print(request.POST.dict)
 
-    """
-    .data
-
-The unrendered, serialized data of the response.
-.status_code
-
-The numeric status code of the HTTP response.
-.content
-
-The rendered content of the response. The .render() method must have been called before .content can be accessed.
-.template_name
-
-The template_name, if supplied. Only required if HTMLRenderer or some other custom template renderer is the accepted renderer for the response.
-.accepted_renderer
-
-The renderer instance that will be used to render the response.
-
-Set automatically by the APIView or @api_view immediately before the response is returned from the view.
-.accepted_media_type
-
-The media type that was selected by the content negotiation stage.
-
-Set automatically by the APIView or @api_view immediately before the response is returned from the view.
-.renderer_context
-    """
-
-    # return BorrowViewSet.as_view({"post": "create"})(request)
-    # cont = res.content
-    # print(cont)
-    # return redirect("borrows")
-    return redirect('createborrowpage')
+    return redirect("createborrowpage")
 
 
 # https://stackoverflow.com/questions/4808329/can-i-call-a-view-from-within-another-view
