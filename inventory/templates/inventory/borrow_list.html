@@ -52,6 +52,8 @@
                     <div class="card-body">
                         <div class="container-fluid">
                             <table class="table table-bordered table-striped" id="category-tbl">
+                                Qty <b>B</b> stands for Qty <b>borrowed</b>, Qty <b>R</b> stands for Qty <b>remaining/not
+                                yet returned</b><br><br>
                                 <b>Search results for: "{{ search }}"</b> <br>
                                 <b>Filter results for component: "{{ comp.name }}"</b> <br>
                                 <b>Filter results for user: "{{ user.email }}"</b> <br>
@@ -59,8 +61,8 @@
                                 <a href="{% url 'borrows' %}">Go back</a>
                                 <colcategory>
                                     <col width="5%"/>
-                                    <col width="7%"/>
-                                    <col width="7%"/>
+                                    <col width="5%"/>
+                                    <col width="5%"/>
                                     <col width="10%"/>
                                     <col width="20%"/>
                                     <col width="20%"/>
@@ -70,8 +72,8 @@
                                 <thead>
                                 <tr>
                                     <th class="text-center">ID</th>
-                                    <th class="text-center">Qty borrowed</th>
-                                    <th class="text-center">Qty remaining</th>
+                                    <th class="text-center">Qty B</th>
+                                    <th class="text-center">Qty R</th>
                                     <th class="text-center">Person Who Borrowed</th>
                                     <th class="text-center">Borrow Timestamp</th>
                                     <th class="text-center">Return Timestamp</th>

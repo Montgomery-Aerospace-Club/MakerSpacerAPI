@@ -7,6 +7,12 @@
 {% endblock %}
 
 {% block content %}
+    <nav class="navbar navbar-light bg-light">
+        <a class="navbar-brand" href="{% url 'dashboard' %}">
+            <img src="{% static 'img/logo.png' %}" width="30" height="30" class="d-inline-block align-top" alt="">
+            MontyMakerSpace
+        </a>
+    </nav>
     <div class="container">
         <h3 class="fw-bolder">Borrow Component</h3>
         <form action="{% url 'createborrow' %}" method="POST" class="form-horizontal" novalidate="">
