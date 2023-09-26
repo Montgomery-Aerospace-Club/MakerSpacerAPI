@@ -60,6 +60,7 @@
                                 <colcategory>
                                     <col width="5%"/>
                                     <col width="7%"/>
+                                    <col width="7%"/>
                                     <col width="10%"/>
                                     <col width="20%"/>
                                     <col width="20%"/>
@@ -70,10 +71,10 @@
                                 <tr>
                                     <th class="text-center">ID</th>
                                     <th class="text-center">Qty borrowed</th>
+                                    <th class="text-center">Qty remaining</th>
                                     <th class="text-center">Person Who Borrowed</th>
                                     <th class="text-center">Borrow Timestamp</th>
                                     <th class="text-center">Return Timestamp</th>
-
                                     <th class="text-center">Component & <br> Qty Left</th>
                                     <th class="text-center">Status</th>
                                 </tr>
@@ -84,6 +85,7 @@
                                         <td class="text-center"><a
                                                 href="{{ borrow.get_absolute_url }}">{{ borrow.pk }}</a></td>
                                         <td> {{ borrow.qty }}</td>
+                                        <td> {{ borrow.qty_remaining }}</td>
                                         <td>
                                             {% if borrow.person_who_borrowed.first_name == "" %}
                                                 {{ borrow.person_who_borrowed.username|capfirst }}<br>

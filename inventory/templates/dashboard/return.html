@@ -79,6 +79,9 @@
                         {% endfor %}
                     {% endif %}
                 </div>
+
+                <input type="hidden" name="borrow_in_progress" id="borrowinprog">
+
                 <div class="form-actions">
                     <button class="btn btn-primary js-tooltip" title=""
                             data-original-title="" onclick="onSubmit()">Submit return request
@@ -116,9 +119,15 @@
             });
 
             function onSubmit() {
-
+                const borInProg = document.getElementById("borrowinprog")
                 const qtyresultfield = document.getElementById("qty-result-field")
                 qtyresultfield.disabled = false
+                let qty = parseInt(qtyresultfield.value)
+                if (qty > 0) {
+                    borInProg.value = true
+                } else if (qty === 0) {
+                    borInProg.value = false
+                }
                 document.getElementById("borrow_form").submit();
 
             }

@@ -611,6 +611,7 @@ class BorrowViewSet(viewsets.ModelViewSet):
                 instance.qty_remaining = serializer.validated_data.get(
                     "qty_remaining", instance.qty_remaining
                 )
+
                 instance.save()
 
                 if getattr(instance, "_prefetched_objects_cache", None):
@@ -727,7 +728,7 @@ def createBorrowFromForm(request: HttpRequest):
 
 
 def returnComponent(request: HttpRequest):
-    bors = Borrow.objects.all().filter(borrow_in_progress=True)
+    bors = Borrow.objects.all().filter(borrow_in_progress=True, person_who_borrowed__id__exact=request.user.id)
     if not request.user.is_authenticated:
         messages.error(
             request, "You need to be logged in in order to borrow makerspace items!"
@@ -742,7 +743,6 @@ def returnComponent(request: HttpRequest):
         "dashboard/return.html",
         {
             "bors": bors,
-
         },
     )
 
