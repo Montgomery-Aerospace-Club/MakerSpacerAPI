@@ -166,4 +166,4 @@ class Borrow(ExportModelOperationsMixin("Borrow"), models.Model):
     def save(self, *args, **kwargs):
         if not self.pk:
             self.qty_remaining = self.qty
-            super(Borrow, self).save(*args, **kwargs)
+        super(Borrow, self).save(*args, **kwargs)
