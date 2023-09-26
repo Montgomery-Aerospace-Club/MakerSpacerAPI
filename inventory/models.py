@@ -123,6 +123,8 @@ class Component(ExportModelOperationsMixin("Component"), models.Model):
         return self.name
 
     # TODO: Problem here! I need to like change it cuz when on the first save there is no pk, i need to use a different uuid variable like
+    # yeah
+    # TODO: probably add image field
     # short uuid or smth from a package.
     def save(self, *args, **kwargs):
         path = os.path.join(
