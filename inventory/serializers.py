@@ -105,6 +105,7 @@ class BorrowPostSerializer(serializers.HyperlinkedModelSerializer):
         fields = [
             "url",
             "qty",
+            "qty_remaining",
             "person_who_borrowed",
             "timestamp_check_out",
             "timestamp_check_in",
@@ -121,6 +122,7 @@ class BorrowGetSerializer(serializers.HyperlinkedModelSerializer):
         fields = [
             "url",
             "qty",
+            "qty_remaining",
             "person_who_borrowed",
             "timestamp_check_out",
             "timestamp_check_in",

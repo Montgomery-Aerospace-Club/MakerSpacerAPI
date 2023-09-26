@@ -448,6 +448,13 @@ class StorageBinViewSet(viewsets.ModelViewSet):
 
 
 class BorrowViewSet(viewsets.ModelViewSet):
+
+    def get_object(self):
+        idd = self.request.POST.get('pk', None)
+        if idd is not None:
+            self.kwargs['pk'] = idd
+        return super(BorrowViewSet, self).get_object()
+
     queryset = Borrow.objects.all()
     search_fields = [
         "person_who_borrowed__username",
@@ -490,7 +497,6 @@ class BorrowViewSet(viewsets.ModelViewSet):
                 },
                 status=status.HTTP_400_BAD_REQUEST,
             )
-            # TODO: create qty component returns
 
         comp_db = Component.objects.get(pk=comp.pk)
         comp_db.qty -= qty
@@ -509,17 +515,20 @@ class BorrowViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
 
         qty = serializer.validated_data.get("qty", None)
-        comp = instance.component
+        if qty is None:
+            qty = serializer.validated_data.get("qty_remaining", None)
 
+        comp = instance.component
         if instance.person_who_borrowed.pk != request.user.pk and (
-            not request.user.is_staff
+                not request.user.is_staff
         ):
             return Response(
                 {"details": ["You cannot modify someone else's borrow!"]},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        # checks if we are udating the borrow amount or not and checks if the borrow is in progress to prevent people from changing old records
+        # checks if we are udating the borrow amount or not and checks if the borrow is in progress to prevent people
+        # from changing old records
         if not instance.borrow_in_progress:
             return Response(
                 {
@@ -531,77 +540,104 @@ class BorrowViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if qty:
-            if comp.qty + instance.qty - qty < 0:
+        if qty is not None:
+
+            if qty > 0:
+                if comp.qty + instance.qty - qty < 0:
+                    return Response(
+                        {
+                            "details": [
+                                f"You cannot overborrow the item: {comp.name}",
+                                f"Component Quantity Available (amount + old qty): {comp.qty + instance.qty}",
+                                f"Asked Quantity (new qty): {qty}",
+                            ]
+                        },
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
+                serializer.validated_data["timestamp_check_in"] = None
+                serializer.validated_data["borrow_in_progress"] = True
+
+                comp.qty = comp.qty + instance.qty - qty
+                comp.save()
+
+                serializer.save()
+
+                if getattr(instance, "_prefetched_objects_cache", None):
+                    # If 'prefetch_related' has been applied to a queryset, we need to
+                    # forcibly invalidate the prefetch cache on the instance.
+                    instance._prefetched_objects_cache = {}
+
+                return Response(serializer.data)
+
+            elif qty == 0:
+
+                inProgress = serializer.validated_data.get("borrow_in_progress", False)
+                # im leaving it False as default cuz like i don't want to make it so that the user ticks the thing where
+                # it says inProgress cuz by deafult a return is going to be not in progress
+                if inProgress and (not request.user.is_staff):
+                    return Response(
+                        {
+                            "details": [
+                                f"Cannot modify borrow_in_progress field from {instance.borrow_in_progress} to True",
+                                "This essentially means that you are 'reviving' this borrow which is illegal",
+                            ]
+                        },
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
+
+                # this runs if inProgress field in the request body is false, meaning we are "closing" or "concluding"
+                # the borrow this code below is to start the return "process"
+                if serializer.validated_data.get(
+                        "timestamp_check_in", instance.timestamp_check_in
+                ) is None and (not request.user.is_staff):
+                    return Response(
+                        {
+                            "details": [
+                                "If you are closing this borrow, you need to add a timestamp_check_in field",
+                            ]
+                        },
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
+
+                comp.qty += instance.qty
+                comp.save()
+
+                instance.borrow_in_progress = serializer.validated_data.get(
+                    "borrow_in_progress", instance.borrow_in_progress
+                )
+                instance.timestamp_check_in = serializer.validated_data.get(
+                    "timestamp_check_in", instance.timestamp_check_in
+                )
+                instance.qty_remaining = serializer.validated_data.get(
+                    "qty_remaining", instance.qty_remaining
+                )
+                instance.save()
+
+                if getattr(instance, "_prefetched_objects_cache", None):
+                    # If 'prefetch_related' has been applied to a queryset, we need to
+                    # forcibly invalidate the prefetch cache on the instance.
+                    instance._prefetched_objects_cache = {}
+
+                return Response({})
+            else:
+                # qty<0
                 return Response(
                     {
                         "details": [
-                            f"You cannot overborrow the item: {comp.name}",
-                            f"Component Quantity Available (amount + old qty): {comp.qty + instance.qty}",
-                            f"Asked Quantity (new qty): {qty}",
+                            f"You cannot change your qty to a negative number",
                         ]
                     },
                     status=status.HTTP_400_BAD_REQUEST,
                 )
-            serializer.validated_data["timestamp_check_in"] = None
-            serializer.validated_data["borrow_in_progress"] = True
-
-            comp.qty = comp.qty + instance.qty - qty
-            comp.save()
-
-            serializer.save()
-
-            if getattr(instance, "_prefetched_objects_cache", None):
-                # If 'prefetch_related' has been applied to a queryset, we need to
-                # forcibly invalidate the prefetch cache on the instance.
-                instance._prefetched_objects_cache = {}
-
-            return Response(serializer.data)
-
-        else:  # looks like we are not updating the qty, lets take a look at the other two fields
-            inProgress = serializer.validated_data.get("borrow_in_progress", True)
-            if inProgress and (not request.user.is_staff):
-                return Response(
-                    {
-                        "details": [
-                            f"Cannot modify borrow_in_progress field from {instance.borrow_in_progress} to True",
-                            "This essentially means that you are 'reviving' this borrow which is illegal",
-                        ]
-                    },
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-
-            # this runs if inProgress field in the request body is false, meaning we are "closing" or "concluding" the borrow
-            # this code below is to start the return "process"
-            if serializer.validated_data.get(
-                "timestamp_check_in", instance.timestamp_check_in
-            ) is None and (not request.user.is_staff):
-                return Response(
-                    {
-                        "details": [
-                            "If you are closing this borrow, you need to add a timestamp_check_in field",
-                        ]
-                    },
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-
-            comp.qty += instance.qty
-            comp.save()
-
-            instance.borrow_in_progress = serializer.validated_data.get(
-                "borrow_in_progress", instance.borrow_in_progress
+        else:
+            return Response(
+                {
+                    "details": [
+                        f"Please add a qty to your borrow request",
+                    ]
+                },
+                status=status.HTTP_400_BAD_REQUEST,
             )
-            instance.timestamp_check_in = serializer.validated_data.get(
-                "timestamp_check_in", instance.timestamp_check_in
-            )
-            instance.save()
-
-            if getattr(instance, "_prefetched_objects_cache", None):
-                # If 'prefetch_related' has been applied to a queryset, we need to
-                # forcibly invalidate the prefetch cache on the instance.
-                instance._prefetched_objects_cache = {}
-
-            return Response({})
 
     def get_serializer_class(self):
         if self.action in ["create", "update", "partial_update"]:
@@ -691,37 +727,33 @@ def createBorrowFromForm(request: HttpRequest):
 
 
 def returnComponent(request: HttpRequest):
-    comps = Component.objects.all()
+    bors = Borrow.objects.all().filter(borrow_in_progress=True)
     if not request.user.is_authenticated:
         messages.error(
-            request, "You need to be logged in in order to return your items!"
+            request, "You need to be logged in in order to borrow makerspace items!"
         )
         messages.info(
             request,
             "You are currently not logged in! Login at /login/ or go to dashboard",
-        )
-        return render(
-            request,
-            "dashboard/return.html",
         )
 
     return render(
         request,
         "dashboard/return.html",
         {
-            "components": comps,
-            "userurl": f"http://127.0.0.1:8000/rest/users/{request.user.pk}/",
-            "user": request.user,
+            "bors": bors,
+
         },
     )
 
 
 def createReturnForm(request: HttpRequest):
     if request.POST:
+       # print(request.POST)
         if request.user.is_authenticated:
-            evl = BorrowViewSet.as_view({"post": "update"})(request)
+            evl = BorrowViewSet.as_view({"post": "partial_update"})(request)
             data = evl.data
-            # print(data)
+           # print(data)
             status_code = evl.status_code
             if status_code == 400:
                 if "details" in data:
@@ -734,7 +766,7 @@ def createReturnForm(request: HttpRequest):
                         messages.error(request, errorstr)
             else:
                 # print("success")
-                messages.success(request, "Returned component!")
+                messages.success(request, "Returned component with specified return amount!")
 
         else:
             messages.error(request, "You are not logged in!")

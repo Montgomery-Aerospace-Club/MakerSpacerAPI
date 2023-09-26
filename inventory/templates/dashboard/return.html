@@ -8,51 +8,55 @@
 
 {% block content %}
     <div class="container">
-        <h3 class="fw-bolder">Return Component</h3>
-        <form action="{% url 'createborrow' %}" method="POST" class="form-horizontal" novalidate="">
+        <h3 class="fw-bolder">Return Borrow</h3>
+        <form action="{% url 'returncomponent' %}" method="POST" class="form-horizontal" novalidate="" id="borrow_form">
             <fieldset>
                 {% csrf_token %}
-
-                <div class="form-group">
-                    <label class="col-sm-2 control-label">Qty</label>
-
-                    <div class="col-sm-10">
-                        <input name="qty" class="form-control" type="number" value=""/>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="col-sm-2 control-label">Person who borrowed</label>
-
-                    <div class="col-sm-10">
-                        <select class="form-control" name="person_who_borrowed">
-                            <option value="{{ userurl }}">{{ user.username }} | {{ user.email }}</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <!-- date:'Y-m-dTh:i' -->
-                    <label class="col-sm-2 control-label">Timestamp check out</label>
-
-                    <div class="col-sm-10">
-                        <input name="timestamp_check_out" class="form-control" type="datetime-local"
-                               value="{% get_local_now_format '%Y-%m-%dT%H:%M:%S' %}"/>
-                    </div>
-                </div>
 
                 <div class="form-group">
                     <label class="col-sm-2 control-label">Component</label>
 
                     <div class="col-sm-10">
-                        <select class="form-control" name="component">
-                            {% for comp in components %}
-                                <option value="http://127.0.0.1:8000/rest/components/{{ comp.pk }}/">{{ comp.name|capfirst }}
-                                    | Qty available: {{ comp.qty }} | ID: {{ comp.id }}</option>
+                        <select id="borrow_select_field" class="form-control" name="pk">
+                            {% for bor in bors %}
+                                <option borqty="{{ bor.qty }}"
+                                        value="{{ bor.pk }}">{{ bor.component.name|capfirst }}
+                                    | Qty borrowed: {{ bor.qty }} | ID: {{ bor.id }} | Person who created
+                                    borrow: {{ bor.person_who_borrowed.username }}
+                                    / {{ bor.person_who_borrowed.email }}</option>
                             {% endfor %}
                         </select>
                     </div>
                 </div>
+
+                <div class="form-group">
+                    <label class="col-sm-10 control-label">Qty you are returning</label>
+
+                    <div class="col-sm-2">
+                        <input id="qty-input-field" value=""/>
+                    </div>
+                </div>
+                <div class=" form-group">
+                    <label class="col-sm-12 control-label">Qty left that you need to return</label>
+
+                    <div class="col-sm-2">
+                        <input id="qty-result-field" class="form-control" name="qty_remaining" type="number" value=""
+                               disabled="disabled"/>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <!-- date:'Y-m-dTh:i' -->
+                    <label class="col-sm-5 control-label">Timestamp returning component</label>
+
+                    <div class="col-sm-10">
+                        <input name="timestamp_check_in" class="form-control" type="datetime-local"
+                               value="{% get_local_now_format '%Y-%m-%dT%H:%M:%S' %}"/>
+                    </div>
+                </div>
+
+
                 <div class=" col-sm-5">
                     {% if messages %}
                         {% for message in messages %}
@@ -77,12 +81,51 @@
                 </div>
                 <div class="form-actions">
                     <button class="btn btn-primary js-tooltip" title=""
-                            data-original-title="Make a POST request on the Borrow List resource">Submit request
+                            data-original-title="" onclick="onSubmit()">Submit return request
                     </button>
                 </div>
             </fieldset>
         </form>
     </div>
 
+    {% block scripts %}
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const qtyformfield = document.getElementById("qty-input-field")
+                const qtyresultfield = document.getElementById("qty-result-field")
+                const borSelectField = document.getElementById("borrow_select_field")
+                qtyresultfield.value = borSelectField.options[borSelectField.selectedIndex].getAttribute("borqty")
+                // Add an input event listener to the search input
+                qtyformfield.addEventListener("keyup", function (e) {
+                    // Check if the search input has any value
+
+                    let qty = borSelectField.options[borSelectField.selectedIndex].getAttribute("borqty")
+                    let qtyOfBorrow = parseInt(qty)
+                    let qtyWantedToReturn = parseInt(e.target.value)
+                    if (isNaN(qtyWantedToReturn)) {
+                        qtyresultfield.value = qtyOfBorrow
+                    } else {
+
+                        qtyresultfield.value = (qtyOfBorrow - qtyWantedToReturn).toString()
+
+
+                    }
+
+
+                });
+            });
+
+            function onSubmit() {
+
+                const qtyresultfield = document.getElementById("qty-result-field")
+                qtyresultfield.disabled = false
+                document.getElementById("borrow_form").submit();
+
+            }
+
+        </script>
+
+
+    {% endblock %}
 
 {% endblock %}

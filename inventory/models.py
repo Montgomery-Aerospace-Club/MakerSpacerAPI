@@ -6,7 +6,6 @@ from django_prometheus.models import ExportModelOperationsMixin
 from django.core.validators import MaxValueValidator
 from django.contrib.auth.models import AbstractUser
 
-
 from django.conf import settings
 from django.dispatch import receiver
 from django.db.models.signals import post_save
@@ -145,6 +144,7 @@ class Component(ExportModelOperationsMixin("Component"), models.Model):
 
 class Borrow(ExportModelOperationsMixin("Borrow"), models.Model):
     qty = models.IntegerField(validators=[MinValueValidator(1)])
+    qty_remaining = models.IntegerField(validators=[MinValueValidator(0)], default=0)
     person_who_borrowed = models.ForeignKey(User, on_delete=models.CASCADE)
     timestamp_check_out = models.DateTimeField()
     timestamp_check_in = models.DateTimeField(null=True, blank=True)
@@ -162,3 +162,8 @@ class Borrow(ExportModelOperationsMixin("Borrow"), models.Model):
     def get_absolute_url(self):
         """Returns the URL to access a particular instance of MyModelName."""
         return reverse("borrow-website-detail", args=[str(self.id)])
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.qty_remaining = self.qty
+            super(Borrow, self).save(*args, **kwargs)
