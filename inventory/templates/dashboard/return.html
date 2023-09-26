@@ -3,16 +3,15 @@
 {% load custom_time_tags %}
 
 {% block title %}
-    Borrow Component
+    Return Component
 {% endblock %}
 
 {% block content %}
     <div class="container">
-        <h3 class="fw-bolder">Borrow Component</h3>
+        <h3 class="fw-bolder">Return Component</h3>
         <form action="{% url 'createborrow' %}" method="POST" class="form-horizontal" novalidate="">
             <fieldset>
                 {% csrf_token %}
-
 
                 <div class="form-group">
                     <label class="col-sm-2 control-label">Qty</label>

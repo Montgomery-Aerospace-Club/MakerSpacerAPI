@@ -123,6 +123,8 @@ class Component(ExportModelOperationsMixin("Component"), models.Model):
     def __str__(self):
         return self.name
 
+    # TODO: Problem here! I need to like change it cuz when on the first save there is no pk, i need to use a different uuid variable like
+    # short uuid or smth from a package.
     def save(self, *args, **kwargs):
         path = os.path.join(
             "media", "barcodes", f"{self.name}_{self.pk}.png".replace(" ", "_")
