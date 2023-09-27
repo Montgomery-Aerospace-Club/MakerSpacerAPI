@@ -125,6 +125,9 @@ class Component(ExportModelOperationsMixin("Component"), models.Model):
     # TODO: Problem here! I need to like change it cuz when on the first save there is no pk, i need to use a different uuid variable like
     # yeah
     # TODO: probably add image field
+    # TODO: i need to do tree view html
+    # TODO: on raspberry pi install bz2 with compile 3.01.6
+    # TODO: host website
     # short uuid or smth from a package.
     def save(self, *args, **kwargs):
         path = os.path.join(
